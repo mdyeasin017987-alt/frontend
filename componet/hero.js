@@ -1,68 +1,56 @@
-"use client";
-import Image from "next/image";
-import { ShoppingCart, ArrowRight } from "lucide-react";
-
+// components/Hero.jsx
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-[var(--forest)]">
-      {/* Concentric circle backdrop — radii chosen so each ring is visible */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute right-[-10%] top-1/2 hidden -translate-y-1/2 md:block"
-      >
-        <div className="h-[620px] w-[620px] rounded-full bg-[var(--forest-mid)]" />
-        <div className="absolute inset-[70px] rounded-full bg-[var(--forest-light)]" />
-        <div className="absolute inset-[150px] rounded-full bg-[#5a9c2e]" />
-      </div>
-
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-10 px-6 py-16 md:grid-cols-2 md:px-10 md:py-24">
-        {/* Copy column */}
-        <div className="relative z-10">
-          <h1 className="font-display text-5xl font-black uppercase leading-[0.95] text-white sm:text-6xl">
+    <section
+      className="w-full bg-cover bg-center bg-no-repeat py-14 px-[5vw]"
+      style={{
+        backgroundImage:
+          "url('https://mahesh-2027.my.canva.site/home-product-about-contact-us/_assets/media/e1f5464ea79e036b0baf89eef445e8d2.jpg')",
+      }}
+    >
+      <div className="max-w-[1180px] mx-auto flex flex-wrap items-center justify-around gap-8">
+        {/* Content */}
+        <div className="flex-1 min-w-[320px] max-w-[460px]">
+          <h1 className="font-anton text-white leading-[0.95] capitalize tracking-[0.5px] text-[clamp(5.2rem,4.5vw,6.9rem)]">
             100% Pure
-            <span className="block text-[var(--lime)]">Coconut</span>
           </h1>
 
-          <p className="mt-6 max-w-sm text-white/85">
-            No stock or wasted coconut, direct farmer to you.
+          <h1 className="font-anton text-[clamp(6.9rem,5.2vw,7.2rem)] leading-[0.95] capitalize tracking-[0.5px] text-lime-green mb-4">
+            Coconut
+          </h1>
+
+          <p className="text-white text-lg leading-6 max-w-[300px] mb-6">
+            No stock or wasted coconut, direct farmer to you
           </p>
 
-          <div className="mt-8 flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap items-center gap-5 mb-10">
             <button
               type="button"
-              className="flex items-center gap-2 rounded-full bg-[var(--lime)] px-6 py-3 font-semibold text-[var(--forest)] shadow-lg shadow-black/20 transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white active:scale-[0.98]"
+              className="flex items-center gap-2 bg-lime-green text-forest-green px-5 py-2.5 rounded-full font-semibold"
             >
-              <ShoppingCart size={18} strokeWidth={2.5} />
+              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
               Add to Cart
             </button>
 
-            <a
-              href="#products"
-              className="group flex items-center gap-1 font-semibold text-[var(--lime)] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lime)] rounded-sm"
-            >
-              view product
-              <ArrowRight
-                size={16}
-                className="transition-transform group-hover:translate-x-1"
-              />
+            <a href="#" className="text-lime-green font-medium text-lg inline-flex items-center gap-2">
+              view product →
             </a>
           </div>
 
-          <p className="mt-10 text-white/90">stay healthy, stay safe.</p>
+          <p className="text-white text-base font-medium">stay healthy, stay safe.</p>
         </div>
 
-        {/* Product image column */}
-        <div className="relative z-10 flex justify-center md:justify-end">
-          <div className="relative h-[320px] w-[280px] sm:h-[400px] sm:w-[340px]">
-            <Image
-              src="/coconut.png"
-              alt="Fresh green coconut with stem"
-              fill
-              priority
-              sizes="(max-width: 768px) 280px, 340px"
-              className="object-contain drop-shadow-2xl"
-            />
-          </div>
+        {/* Image */}
+        <div className="flex-1.3 min-w-[300px] flex justify-center items-center">
+          <img
+            src="https://mahesh-2027.my.canva.site/home-product-about-contact-us/_assets/media/09dd688a15623823b2e9e4301c20d546.png"
+            alt="Fresh green coconut"
+            className="w-full max-w-[50rem] object-cover drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)]"
+          />
         </div>
       </div>
     </section>

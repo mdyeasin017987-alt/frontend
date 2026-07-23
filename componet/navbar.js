@@ -11,16 +11,16 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   return (
-    <header className="bg-[var(--forest-mid)]">
+    <header className="bg-[var(--forest-mid)] sticky top-0 z-50 w-full backdrop-blur-2xl">
       <nav
-        className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10"
+        className="mx-auto flex max-w-7xl position-sticky items-center justify-between px-6 py-4 backdrop-blur-2xl md:px-10"
         aria-label="Main navigation"
       >
         <Link
           href="/"
           className="font-display text-2xl font-bold tracking-tight text-white"
         >
-          logo
+          Cocobazar
         </Link>
 
         <ul className="hidden items-center gap-8 text-sm font-medium text-white/90 md:flex">
@@ -35,14 +35,16 @@ export default function Navbar() {
             </li>
           ))}
         </ul>
-
+        <Link href="/cart">
+         
         <button
           type="button"
           aria-label="View cart"
-          className="rounded-full p-2 text-white transition-colors hover:text-[var(--lime)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lime)]"
+          className="rounded-full p-2 text-white  transition-colors hover:text-[var(--lime)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--lime)]"
         >
           <ShoppingCart size={22} strokeWidth={2} />
         </button>
+        </Link>
       </nav>
     </header>
   );
