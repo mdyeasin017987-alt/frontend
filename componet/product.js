@@ -1,14 +1,22 @@
+"use client";
 import React from 'react';
 import { ShoppingCart, Star } from 'lucide-react';
 import { products } from '../app/assart';
 import Link from 'next/link';
+import { useCart } from '@/app/context/CartContext';
 
 
 // Product Data Array
 
 
 // Reusable Product Card Component
-const ProductCard = ({ id ,price, rating, description, image }) => {
+const ProductCard = ({ id, price, rating, description, image, title, piece, weight }) => {
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+    addItem({ id, price, title, description, image, piece, weight });
+  };
+
   return (
     <div className="w-full bg-[#fdfdfd] border border-black rounded-[24px] overflow-hidden flex flex-col mx-auto sm:mx-0">
       {/* Image Area */}
@@ -39,7 +47,10 @@ const ProductCard = ({ id ,price, rating, description, image }) => {
 
         {/* Action Button */}
         <div className="flex gap-2 mt-auto">
-        <button className="bg-black hover:bg-gray-800 transition-colors text-white rounded-xl py-2 px-3 flex items-center justify-center gap-2 w-max text-sm font-medium mt-auto">
+        <button
+          onClick={handleAddToCart}
+          className="bg-black hover:bg-gray-800 transition-colors text-white rounded-xl py-2 px-3 flex items-center justify-center gap-2 w-max text-sm font-medium mt-auto"
+        >
           <ShoppingCart size={16} />
           Add to Cart
         </button>
@@ -80,6 +91,9 @@ export default function App() {
             rating={product.rating}
             description={product.description}
             image={product.image}
+            title={product.title}
+            piece={product.piece}
+            weight={product.weight}
             id={product.id}
           />
         ))}

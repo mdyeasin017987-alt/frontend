@@ -1,9 +1,29 @@
 "use client";
 import React, { useState } from 'react';
-import {products} from '@/app/assart';
+import { products } from '@/app/assart';
 import { useParams } from 'next/navigation';
+import { useCart } from '@/app/context/CartContext';
 
 export default function App() {
+
+
+  const { addItem } = useCart();
+
+  const handleAddToCart = () => {
+  if (!product) return;
+  addItem({
+    id: product.id,
+    price: product.price,
+    title: product.title,
+    description: product.description,
+    image: product.image,
+    piece: product.piece,
+    weight: product.weight,
+    size: selectedSize,
+    quantity
+  });
+};
+
   const { slug } = useParams();
   const product = products.find((p) => p.id === parseInt(slug));
 
@@ -95,9 +115,8 @@ export default function App() {
                 <button
                   key={thumb.id}
                   onClick={() => setActiveThumb(thumb.id)}
-                  className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden border-2 bg-white transition-all shadow-xs ${
-                    activeThumb === thumb.id ? 'border-black scale-105' : 'border-transparent hover:border-gray-400'
-                  }`}
+                  className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl overflow-hidden border-2 bg-white transition-all shadow-xs ${activeThumb === thumb.id ? 'border-black scale-105' : 'border-transparent hover:border-gray-400'
+                    }`}
                   aria-label={`View ${thumb.title}`}
                 >
                   {thumb.svg}
@@ -128,33 +147,7 @@ export default function App() {
             </p>
 
             {/* সাইজ সিলেকশন সেকশন */}
-            <div className="mb-6">
-              <h3 className="text-lg md:text-xl font-bold mb-3">
-                Size
-              </h3>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => setSelectedSize('500-700 gm')}
-                  className={`px-5 py-2 rounded-full font-bold text-sm md:text-base border transition-all ${
-                    selectedSize === '500-700 gm'
-                      ? 'bg-black text-white border-black'
-                      : 'bg-[#fce4ec] text-black border-pink-200 hover:bg-pink-100'
-                  }`}
-                >
-                  500-700 gm
-                </button>
-                <button
-                  onClick={() => setSelectedSize('1 Kg+')}
-                  className={`px-5 py-2 rounded-full font-bold text-sm md:text-base border transition-all ${
-                    selectedSize === '1 Kg+'
-                      ? 'bg-black text-white border-black'
-                      : 'bg-[#fce4ec] text-black border-pink-200 hover:bg-pink-100'
-                  }`}
-                >
-                  1 Kg+
-                </button>
-              </div>
-            </div>
+        
 
             {/* কোয়ান্টিটি কাউন্টার সেকশন */}
             <div className="mb-8">
@@ -181,7 +174,7 @@ export default function App() {
             </div>
 
             {/* কার্ট বাটন */}
-            <button className="w-full md:w-max md:px-16 bg-black text-white hover:bg-gray-900 transition-all py-4 rounded-full font-extrabold text-lg text-center shadow-md active:scale-98 transform duration-75">
+            <button onClick={handleAddToCart} className="w-full md:w-max md:px-16 bg-black text-white hover:bg-gray-900 transition-all py-4 rounded-full font-extrabold text-lg text-center shadow-md active:scale-98 transform duration-75">
               Add To Cart
             </button>
 

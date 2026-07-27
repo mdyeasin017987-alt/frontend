@@ -1,48 +1,25 @@
 "use client";
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { useCart } from '@/app/context/CartContext';
 
 export default function App() {
-  // শপিং কার্টের আইটেম স্টেট (নারকেলের ওজন এখন ১ কেজি প্রতি পিস হিসেবে ১ বক্সে ৬ কেজি করা হয়েছে)
-const [cartItems, setCartItems] = useState([
-    { id: 1, name: '6 piece 1 box coconut', piece: 6, weight: '6.0 kg (1 kg/pc)', price: 2500, quantity: 1 },
-    { id: 2, name: '6 piece 1 box coconut', piece: 6, weight: '6.0 kg (1 kg/pc)', price: 2500, quantity: 1 },
-    { id: 3, name: '6 piece 1 box coconut', piece: 6, weight: '6.0 kg (1 kg/pc)', price: 2500, quantity: 1 },
-    { id: 4, name: '6 piece 1 box coconut', piece: 6, weight: '6.0 kg (1 kg/pc)', price: 2500, quantity: 1 },
-  ]);
+  // এখন dummy data নেই — CartContext থেকে সত্যিকারের cart state আসছে,
+  // যেটা product page এর "Add to Cart" বাটন থেকে populate হয়
+  const {
+    items: cartItems,
+    totalQuantity,
+    totalPrice,
+    increaseQty,
+    decreaseQty,
+    removeItem,
+  } = useCart();
 
   // কোড ইনপুট স্টেট
   const [couponCode, setCouponCode] = useState('');
 
-  // প্রোডাক্টের পরিমাণ বাড়ানোর ফাংশন
-  const increaseQty = (id) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
-
-  // প্রোডাক্টের পরিমাণ কমানোর ফাংশন
-  const decreaseQty = (id) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-      )
-    );
-  };
-
-  // প্রোডাক্ট রিমুভ করার ফাংশন (ক্রস বাটনের জন্য)
-  const removeItem = (id) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
-
-  // ওজন বেশি হওয়ায় প্রতিটি বক্সের জন্য ডেলিভারি চার্জ $১৫০ করে ডায়নামিক করা হলো
-  const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  // ওজন বেশি হওয়ায় প্রতিটি বক্সের জন্য ডেলিভারি চার্জ $১৫০ করে ডায়নামিক করা হলো
   const deliveryCharge = totalQuantity * 150;
-
-  // সাবটোটাল বা প্রাইস হিসাব করা (৪টি আইটেমে ডিফল্ট $১০,০০০ থাকবে)
-  const totalPrice = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
   return (
     <div className="w-full min-h-screen bg-[#f3f4f6] py-8 px-4 md:px-8 font-sans">

@@ -7,10 +7,8 @@ import Footer from '../componet/footer';
 const app = () => {
   return (
     <div>
-      <Navbar />
       <Hero />
       <Product />
-      <Footer />
     </div>
   )
 }
