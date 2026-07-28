@@ -17,7 +17,7 @@ export default function Navbar() {
 
 
   return (
-    <header className="bg-[var(--forest-mid)] sticky top-0 z-50 w-full backdrop-blur-2xl">
+    <header className=" sticky top-0 z-50 w-full backdrop-blur-2xl">
       <nav
         className="mx-auto flex max-w-7xl position-sticky items-center justify-between px-6 py-4 backdrop-blur-2xl md:px-10"
         aria-label="Main navigation"
@@ -26,7 +26,8 @@ export default function Navbar() {
           href="/"
           className="font-display text-2xl font-bold tracking-tight text-black"
         >
-          Cocobazar
+          SahyesNatural
+
         </Link>
 
         <ul className="hidden items-center gap-8 text-sm font-medium text-black/90 md:flex">
@@ -50,7 +51,7 @@ export default function Navbar() {
           >
             <div className="relative">
               <ShoppingCart size={22} strokeWidth={2} />
-              <span className="absolute bottom-0 left-0 flex h-3 w-3 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white">{cartItemCount}</span>
+              <span className="absolute bottom-0 left-0 flex h-3 w-3 items-center justify-center rounded-full bg-black text-[10px] font-bold text-white">{cartItemCount||0}</span>
             </div>
           </button>
         </Link>

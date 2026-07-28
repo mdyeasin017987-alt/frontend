@@ -3,15 +3,15 @@ import React from 'react';
 function Footer() {
   return (
     // বাইরের ব্যাকগ্রাউন্ড ফ্রেম যা ইমেজটির মতো দেখাবে
-    <div className="w-full  bg-[#85ff10] flex items-center justify-center p-4 md:p-8">
+    <div className="w-full overflow-hidden  bg-[#85ff10] flex items-center justify-center p-4 md:p-8">
 
       {/* মূল ফুটার কন্টেইনার (উজ্জ্বল লাইম গ্রিন ব্যাকগ্রাউন্ড) */}
       <footer className="w-full h-full  bg-[#85ff10] text-black font-sans p-6 md:p-12 lg:p-16 rounded-sm shadow-sm select-none">
 
         {/* লোগো সেকশন */}
         <div className="mb-4">
-          <h1 className="text-7xl md:text-8xl font-black tracking-tight leading-none text-black select-all">
-            Cocobazar
+          <h1 className="text-5xl md:text-8xl sm:text-6xl font-black tracking-tight leading-none text-black select-all">
+            SahyesNatural
           </h1>
         </div>
 

@@ -15,7 +15,7 @@ export default function Hero() {
             100% Pure
           </h1>
 
-          <h1 className="font-anton text-[clamp(6.9rem,5.2vw,7.2rem)] leading-[0.95] capitalize tracking-[0.5px] text-lime-green mb-4">
+          <h1 className="font-anton text-[clamp(6.9rem,5.2vw,7.2rem)] leading-[0.95] capitalize tracking-[0.5px] text-lime mb-4">
             Coconut
           </h1>
 
@@ -26,7 +26,7 @@ export default function Hero() {
           <div className="flex flex-wrap items-center gap-5 mb-10">
             <button
               type="button"
-              className="flex items-center gap-2 bg-lime-green text-forest-green px-5 py-2.5 rounded-full font-semibold"
+              className="flex items-center gap-2 bg-lime text-forest-green px-5 py-2.5 rounded-full font-semibold"
             >
               <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                 <circle cx="9" cy="21" r="1" />
@@ -36,7 +36,7 @@ export default function Hero() {
               Add to Cart
             </button>
 
-            <a href="#" className="text-lime-green font-medium text-lg inline-flex items-center gap-2">
+            <a href="#" className="text-lime font-medium text-lg inline-flex items-center gap-2">
               view product →
             </a>
           </div>
@@ -45,7 +45,7 @@ export default function Hero() {
         </div>
 
         {/* Image */}
-        <div className="flex-1.3 min-w-[300px] flex justify-center items-center">
+        <div className="flex-[1.3] min-w-[300px] flex justify-center items-center">
           <img
             src="https://mahesh-2027.my.canva.site/home-product-about-contact-us/_assets/media/09dd688a15623823b2e9e4301c20d546.png"
             alt="Fresh green coconut"

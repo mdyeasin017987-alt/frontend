@@ -3,8 +3,8 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { useCart } from '@/app/context/CartContext';
 
-export default function App() {
-  // এখন dummy data নেই — CartContext থেকে সত্যিকারের cart state আসছে,
+export default function CartPage() {
+  // CartContext থেকে সত্যিকারের cart state আসছে,
   // যেটা product page এর "Add to Cart" বাটন থেকে populate হয়
   const {
     items: cartItems,
@@ -15,11 +15,11 @@ export default function App() {
     removeItem,
   } = useCart();
 
-  // কোড ইনপুট স্টেট
+  // কুপন কোড ইনপুট স্টেট
   const [couponCode, setCouponCode] = useState('');
 
-  // ওজন বেশি হওয়ায় প্রতিটি বক্সের জন্য ডেলিভারি চার্জ $১৫০ করে ডায়নামিক করা হলো
-  const deliveryCharge = totalQuantity * 150;
+  // প্রতিটি বক্সের জন্য ডেলিভারি চার্জ ৳150 করে ডায়নামিক করা হলো
+  const deliveryCharge = totalQuantity > 0 ? totalQuantity *150 : 0;
 
   return (
     <div className="w-full min-h-screen bg-[#f3f4f6] py-8 px-4 md:px-8 font-sans">
@@ -33,7 +33,7 @@ export default function App() {
         {/* গ্রিড লেআউট: বামে শপিং কার্ট এবং ডানে চেকআউট */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
 
-          {/* শপিং কার্ট আইটেম বক্স (উজ্জ্বল লাইম গ্রিন কন্টেইনার) */}
+          {/* শপিং কার্ট আইটেম বক্স */}
           <div className="lg:col-span-2 bg-[#85ff10] p-4 md:p-6 rounded-2xl flex flex-col gap-4">
 
             {cartItems.length === 0 ? (
@@ -42,20 +42,15 @@ export default function App() {
               </div>
             ) : (
               cartItems.map((item) => (
-                // প্রতিটি আইটেম কার্ড (সাদা ব্যাকগ্রাউন্ড)
                 <div key={item.id} className="bg-white rounded-xl p-3 md:p-4 flex gap-3 md:gap-4 items-center relative shadow-sm">
 
-                  {/* প্রোডাক্ট ইমেজ এরিয়া (গ্রিন টি/নারিকেল বক্স আর্ট) */}
+                  {/* প্রোডাক্ট ইমেজ */}
                   <div className="w-16 h-16 md:w-24 md:h-20 bg-[#f4fbf0] rounded-lg overflow-hidden border border-gray-200 flex-shrink-0 flex items-center justify-center relative">
-                    <div className="absolute inset-0 bg-gradient-to-br from-green-100 to-green-50 flex flex-col justify-between p-1">
-                      <span className="text-[8px] md:text-[10px] font-bold text-green-700 bg-white px-1 py-0.5 rounded shadow-xs w-max">
-                        গ্রীন ফুড
-                      </span>
-                      <div className="flex justify-end gap-1">
-                        <span className="text-lg">🥥</span>
-                        <span className="text-xs">🥭</span>
-                      </div>
-                    </div>
+                    <img
+                      src={item.image || 'https://via.placeholder.com/150'}
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
 
                   {/* প্রোডাক্টের বিবরণী */}
@@ -66,14 +61,13 @@ export default function App() {
                     <p className="text-xs md:text-sm text-gray-500 mt-0.5">
                       Piece: {item.piece}
                     </p>
-                    {/* নারকেলের নতুন ওজন প্রদর্শন */}
                     <p className="text-xs md:text-sm font-semibold text-green-700">
                       Weight: {item.weight}
                     </p>
                   </div>
 
                   {/* প্রোডাক্ট রিমুভ করার ক্রস বাটন */}
-                  <button 
+                  <button
                     onClick={() => removeItem(item.id)}
                     className="absolute top-3 right-3 text-red-500 hover:text-red-700 transition-colors p-1"
                     aria-label="Remove item"
@@ -85,7 +79,7 @@ export default function App() {
 
                   {/* পরিমাণ পরিবর্তন করার কাউন্টার */}
                   <div className="absolute bottom-3 right-3 flex items-center bg-[#fce4ec] rounded-full px-2 py-0.5 md:py-1 gap-3 border border-pink-100 shadow-2xs">
-                    <button 
+                    <button
                       onClick={() => decreaseQty(item.id)}
                       className="text-black font-extrabold text-sm md:text-lg px-1 md:px-2 hover:opacity-70"
                     >
@@ -94,7 +88,7 @@ export default function App() {
                     <span className="font-bold text-xs md:text-sm text-black min-w-[12px] text-center">
                       {item.quantity}
                     </span>
-                    <button 
+                    <button
                       onClick={() => increaseQty(item.id)}
                       className="text-black font-extrabold text-sm md:text-lg px-1 md:px-2 hover:opacity-70"
                     >
@@ -108,38 +102,31 @@ export default function App() {
 
           </div>
 
-          {/* চেকআউট সেকশন (ডান দিকের উজ্জ্বল লাইম গ্রিন কন্টেইনার) */}
+          {/* চেকআউট সেকশন */}
           <div className="bg-[#85ff10] p-6 rounded-2xl flex flex-col gap-5 shadow-sm">
 
-            {/* চেকআউট শিরোনাম */}
             <h2 className="text-2xl md:text-3xl font-bold text-black text-center">
               Checkout
             </h2>
 
-            {/* চেকআউট সেকশনের ডিভাইডার রেখা */}
             <hr className="border-black border-t-[1.5px] opacity-100" />
 
-            {/* হিসাব-নিকাশ তথ্য */}
             <div className="flex flex-col gap-4 font-bold text-lg md:text-xl text-black">
-
-              {/* টোটাল প্রাইস */}
               <div className="flex justify-between items-center">
                 <span>Total Price:</span>
                 <span>${totalPrice}</span>
               </div>
 
-              {/* ওজনের ভিত্তিতে বৃদ্ধিপ্রাপ্ত ডেলিভারি ফি */}
               <div className="flex justify-between items-center">
                 <span>Delivery:</span>
                 <span>${deliveryCharge}</span>
               </div>
-
             </div>
 
             {/* কুপন কোড সেকশন */}
             <div className="flex flex-col gap-2 mt-2">
               <label className="font-bold text-lg md:text-xl text-black">
-                Cupon code:
+                Coupon code:
               </label>
               <input
                 type="text"
@@ -150,18 +137,21 @@ export default function App() {
               />
             </div>
 
-            {/* শর্তাবলী সেকশন */}
             <p className="text-xs md:text-sm font-bold text-black leading-tight mt-1">
-              *Delivery charge must be included Before Delivery.
+              *Delivery charge must be included before delivery.
             </p>
             <p className="text-xs md:text-sm font-bold text-black leading-tight mt-1 opacity-60">
-              By contnue you agree out tems and conditions.
+              By continuing you agree to our terms and conditions.
             </p>
 
-            {/* পেমেন্ট বাটন */}
-           <Link href={"/Cheackout"}> <button className="w-full bg-black text-white hover:bg-gray-900 transition-colors py-3 px-6 rounded-full font-bold text-base md:text-lg text-center shadow-md active:scale-98 transform duration-75">
-              Contune To Pay
-            </button>
+            {/* চেকআউটে যাওয়ার বাটন — route lowercase হওয়ায় href ঠিক করা হলো */}
+            <Link href="/cheackout">
+              <button
+                disabled={cartItems.length === 0}
+                className="w-full bg-black text-white hover:bg-gray-900 transition-colors py-3 px-6 rounded-full font-bold text-base md:text-lg text-center shadow-md active:scale-98 transform duration-75 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Continue To Pay
+              </button>
             </Link>
           </div>
 

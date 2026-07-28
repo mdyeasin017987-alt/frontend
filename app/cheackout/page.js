@@ -1,6 +1,8 @@
 "use client";
-import React, { useState, useId } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown, CheckCircle2 } from 'lucide-react';
+import { useCart } from '@/app/context/CartContext';
+import { useRouter } from 'next/navigation';
 
 const BD_LOCATIONS = {
   Dhaka: {
@@ -52,61 +54,222 @@ const SelectField = ({ label, required, value, onChange, disabled, options, plac
   </div>
 );
 
-export default function App() {
+export default function CheckoutPage() {
+  const { items: cartItems, totalPrice, totalQuantity, clearCart } = useCart();
+  const router = useRouter();
+
   const [formData, setFormData] = useState({ name: '', phone: '', area: '', address: '', note: '' });
   const [paymentMethod, setPaymentMethod] = useState('cod');
   const [selectedDivision, setSelectedDivision] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
+  const [selectedUpazila, setSelectedUpazila] = useState('');
+  const [errors, setErrors] = useState({});
+  const [placingOrder, setPlacingOrder] = useState(false);
+  const [orderPlaced, setOrderPlaced] = useState(false);
 
   const districts = selectedDivision ? Object.keys(BD_LOCATIONS[selectedDivision]) : [];
   const upazilas = (selectedDivision && selectedDistrict) ? BD_LOCATIONS[selectedDivision][selectedDistrict] : [];
 
+  const deliveryCharge = totalQuantity * 150;
+  const grandTotal = totalPrice + deliveryCharge;
+
+  const handleChange = (field) => (e) => {
+    setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+  };
+
+  const validate = () => {
+    const next = {};
+    if (!formData.name.trim()) next.name = 'Name is required';
+    if (!/^01[0-9]{9}$/.test(formData.phone.trim())) next.phone = 'Enter a valid 11-digit BD phone number';
+    if (!formData.area.trim()) next.area = 'Area is required';
+    if (!selectedDivision) next.division = 'Select a division';
+    if (!selectedDistrict) next.district = 'Select a district';
+    if (!selectedUpazila) next.upazila = 'Select an upazila';
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
+  const handlePlaceOrder = () => {
+    if (cartItems.length === 0) return;
+    if (!validate()) return;
+
+    setPlacingOrder(true);
+
+    // TODO: এখানে backend API-তে POST করতে হবে (order create endpoint)
+    const order = {
+      customer: formData,
+      location: { division: selectedDivision, district: selectedDistrict, upazila: selectedUpazila },
+      paymentMethod,
+      items: cartItems,
+      totalPrice,
+      deliveryCharge,
+      grandTotal,
+    };
+    console.log('Order submitted:', order);
+
+    setTimeout(() => {
+      setPlacingOrder(false);
+      setOrderPlaced(true);
+      clearCart();
+    }, 600);
+  };
+
+  if (orderPlaced) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8 text-center">
+        <CheckCircle2 size={64} className="text-black mb-4" />
+        <h1 className="text-3xl md:text-4xl font-black mb-2">Order Placed!</h1>
+        <p className="font-semibold max-w-md">
+          Thanks for ordering from SahyesNatural. We'll call you shortly to confirm delivery.
+        </p>
+        <button
+          onClick={() => router.push('/')}
+          className="mt-6 bg-black text-white font-bold px-8 py-3 rounded-full"
+        >
+          Back to Home
+        </button>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen --var(--background) p-4 md:p-8 font-sans text-black">
+    <div className="min-h-screen bg-background p-4 md:p-8 font-sans text-black">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-black text-center mb-10">Enter Your Address</h1>
 
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          {/* Delivery Form */}
-          <div className="xl:col-span-2 --var(--background) border-[3px] border-black rounded-3xl p-6 md:p-8">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-black">Delivery Details</h2>
-              <span className="font-bold text-lg bg-black text-white px-4 py-1 rounded-full">ID: 0x55f</span>
-            </div>
-
-            <InputField label="Name" required className="mb-4">
-              <input className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none focus:ring-2 ring-black" placeholder="Your name" />
-            </InputField>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <InputField label="Phone" required><input className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none" placeholder="01XXXXXXXXX" /></InputField>
-              <InputField label="Area" required><input className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none" placeholder="e.g. Mirpur" /></InputField>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              <SelectField label="Division" options={Object.keys(BD_LOCATIONS)} value={selectedDivision} onChange={(e) => {setSelectedDivision(e.target.value); setSelectedDistrict('')}} placeholder="Division" />
-              <SelectField label="District" options={districts} value={selectedDistrict} onChange={(e) => setSelectedDistrict(e.target.value)} disabled={!selectedDivision} placeholder="District" />
-              <SelectField label="Upazila" options={upazilas} disabled={!selectedDistrict} placeholder="Upazila" />
-            </div>
-
-            <InputField label="Delivery Note"><textarea className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none h-24" placeholder="Optional note" /></InputField>
+        {cartItems.length === 0 ? (
+          <div className="bg-white border-[3px] border-black rounded-3xl p-8 text-center font-bold">
+            Your cart is empty. Add some products before checking out.
           </div>
+        ) : (
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            {/* Delivery Form */}
+            <div className="xl:col-span-2 bg-background border-[3px] border-black rounded-3xl p-6 md:p-8">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-black">Delivery Details</h2>
+                <span className="font-bold text-lg bg-black text-white px-4 py-1 rounded-full">ID: 0x55f</span>
+              </div>
 
-          {/* Payment Side */}
-          <div className="--var(--background) border-[3px] border-black rounded-3xl p-6 md:p-8 h-fit">
-            <h2 className="text-2xl font-black mb-6">Payment Method</h2>
-            {PAYMENT_METHODS.map((m) => (
-              <button key={m.id} onClick={() => setPaymentMethod(m.id)} 
-                className={`w-full flex items-center justify-between p-4 mb-3 border-[3px] border-black rounded-xl transition-all ${paymentMethod === m.id ? 'bg-white' : 'bg-transparent'}`}>
-                <span className="font-bold text-lg">{m.label} {m.emoji}</span>
-                {paymentMethod === m.id && <CheckCircle2 className="text-black" />}
+              <InputField label="Name" required className="mb-1">
+                <input
+                  value={formData.name}
+                  onChange={handleChange('name')}
+                  className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none focus:ring-2 ring-black"
+                  placeholder="Your name"
+                />
+              </InputField>
+              {errors.name && <p className="text-red-600 text-sm font-bold mb-3">{errors.name}</p>}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-1 mt-4">
+                <div>
+                  <InputField label="Phone" required>
+                    <input
+                      value={formData.phone}
+                      onChange={handleChange('phone')}
+                      className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none"
+                      placeholder="01XXXXXXXXX"
+                    />
+                  </InputField>
+                  {errors.phone && <p className="text-red-600 text-sm font-bold mt-1">{errors.phone}</p>}
+                </div>
+                <div>
+                  <InputField label="Area" required>
+                    <input
+                      value={formData.area}
+                      onChange={handleChange('area')}
+                      className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none"
+                      placeholder="e.g. Mirpur"
+                    />
+                  </InputField>
+                  {errors.area && <p className="text-red-600 text-sm font-bold mt-1">{errors.area}</p>}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-1 mt-4">
+                <SelectField
+                  label="Division"
+                  required
+                  options={Object.keys(BD_LOCATIONS)}
+                  value={selectedDivision}
+                  onChange={(e) => {
+                    setSelectedDivision(e.target.value);
+                    setSelectedDistrict('');
+                    setSelectedUpazila('');
+                  }}
+                  placeholder="Division"
+                />
+                <SelectField
+                  label="District"
+                  required
+                  options={districts}
+                  value={selectedDistrict}
+                  onChange={(e) => {
+                    setSelectedDistrict(e.target.value);
+                    setSelectedUpazila('');
+                  }}
+                  disabled={!selectedDivision}
+                  placeholder="District"
+                />
+                <SelectField
+                  label="Upazila"
+                  required
+                  options={upazilas}
+                  value={selectedUpazila}
+                  onChange={(e) => setSelectedUpazila(e.target.value)}
+                  disabled={!selectedDistrict}
+                  placeholder="Upazila"
+                />
+              </div>
+              {(errors.division || errors.district || errors.upazila) && (
+                <p className="text-red-600 text-sm font-bold mb-3">
+                  {errors.division || errors.district || errors.upazila}
+                </p>
+              )}
+
+              <InputField label="Delivery Note" className="mt-4">
+                <textarea
+                  value={formData.note}
+                  onChange={handleChange('note')}
+                  className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none h-24"
+                  placeholder="Optional note"
+                />
+              </InputField>
+            </div>
+
+            {/* Payment Side */}
+            <div className="bg-background border-[3px] border-black rounded-3xl p-6 md:p-8 h-fit">
+              <h2 className="text-2xl font-black mb-6">Payment Method</h2>
+              {PAYMENT_METHODS.map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => setPaymentMethod(m.id)}
+                  className={`w-full flex items-center justify-between p-4 mb-3 border-[3px] border-black rounded-xl transition-all ${paymentMethod === m.id ? 'bg-white' : 'bg-transparent'}`}
+                >
+                  <span className="font-bold text-lg">{m.label} {m.emoji}</span>
+                  {paymentMethod === m.id && <CheckCircle2 className="text-black" />}
+                </button>
+              ))}
+
+              <hr className="border-black border-t-[1.5px] my-4" />
+
+              <div className="flex flex-col gap-2 font-bold text-black mb-4">
+                <div className="flex justify-between"><span>Subtotal:</span><span>${totalPrice}</span></div>
+                <div className="flex justify-between"><span>Delivery:</span><span>${deliveryCharge}</span></div>
+                <div className="flex justify-between text-lg border-t-2 border-black pt-2 mt-1">
+                  <span>Total:</span><span>${grandTotal}</span>
+                </div>
+              </div>
+
+              <button
+                onClick={handlePlaceOrder}
+                disabled={placingOrder}
+                className="w-full mt-2 bg-black text-white font-black text-lg py-4 rounded-xl hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {placingOrder ? 'Placing Order…' : 'Place Order'}
               </button>
-            ))}
-            <button className="w-full mt-4 bg-black text-white font-black text-lg py-4 rounded-xl hover:scale-[1.02] transition-transform">
-              Place Order
-            </button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
