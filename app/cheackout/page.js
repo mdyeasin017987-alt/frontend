@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ChevronDown, CheckCircle2 } from 'lucide-react';
 import { useCart } from '@/app/context/CartContext';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/app/lib/supabaseClient';
 
 const BD_LOCATIONS = {
   Dhaka: {
@@ -66,11 +67,13 @@ export default function CheckoutPage() {
   const [errors, setErrors] = useState({});
   const [placingOrder, setPlacingOrder] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const districts = selectedDivision ? Object.keys(BD_LOCATIONS[selectedDivision]) : [];
   const upazilas = (selectedDivision && selectedDistrict) ? BD_LOCATIONS[selectedDivision][selectedDistrict] : [];
 
-  const deliveryCharge = totalQuantity * 150;
+  // cart page-এর মতোই: প্রথম প্রোডাক্টে ৳150, তারপর প্রতিটা অতিরিক্ত প্রোডাক্টে ৳30 করে যোগ
+  const deliveryCharge = totalQuantity > 0 ? 150 + (totalQuantity - 1) * 30 : 0;
   const grandTotal = totalPrice + deliveryCharge;
 
   const handleChange = (field) => (e) => {
@@ -89,29 +92,42 @@ export default function CheckoutPage() {
     return Object.keys(next).length === 0;
   };
 
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (cartItems.length === 0) return;
     if (!validate()) return;
 
     setPlacingOrder(true);
+    setSubmitError('');
 
-    // TODO: এখানে backend API-তে POST করতে হবে (order create endpoint)
-    const order = {
-      customer: formData,
-      location: { division: selectedDivision, district: selectedDistrict, upazila: selectedUpazila },
-      paymentMethod,
-      items: cartItems,
-      totalPrice,
-      deliveryCharge,
-      grandTotal,
+    // orders টেবিলের কলাম নামের সাথে মিলিয়ে row object বানানো হলো
+    const orderRow = {
+      customer_name: formData.name,
+      phone: formData.phone,
+      division: selectedDivision,
+      district: selectedDistrict,
+      upazila: selectedUpazila,
+      area: formData.area,
+      address_note: formData.note,
+      items: cartItems,          // jsonb column, পুরো cart snapshot হিসেবে সেভ হবে
+      total_price: totalPrice,
+      delivery_charge: deliveryCharge,
+      grand_total: grandTotal,
+      payment_method: paymentMethod,
     };
-    console.log('Order submitted:', order);
 
-    setTimeout(() => {
-      setPlacingOrder(false);
-      setOrderPlaced(true);
-      clearCart();
-    }, 600);
+    const { error } = await supabase.from('orders').insert(orderRow);
+
+    setPlacingOrder(false);
+
+    if (error) {
+      // network issue, RLS policy block, বা validation fail হলে এখানে ধরা পড়বে
+      console.error('Order insert failed:', error);
+      setSubmitError('অর্ডার সেভ করা যায়নি। ইন্টারনেট চেক করে আবার চেষ্টা করো।');
+      return;
+    }
+
+    setOrderPlaced(true);
+    clearCart();
   };
 
   if (orderPlaced) {
@@ -259,6 +275,10 @@ export default function CheckoutPage() {
                   <span>Total:</span><span>${grandTotal}</span>
                 </div>
               </div>
+
+              {submitError && (
+                <p className="text-red-600 text-sm font-bold mb-2 text-center">{submitError}</p>
+              )}
 
               <button
                 onClick={handlePlaceOrder}

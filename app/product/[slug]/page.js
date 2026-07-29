@@ -29,7 +29,7 @@ export default function ProductDetailPage() {
       image: product.image,
       piece: product.piece,
       weight: product.weight,
-      quantity,
+      quantity: quantity
     });
   };
 

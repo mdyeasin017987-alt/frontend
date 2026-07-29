@@ -13,12 +13,13 @@ function cartReducer(state, action) {
     case 'ADD_ITEM': {
       const existing = state.items.find(item => item.id === action.payload.id);
 
+      // In CartContext ADD_ITEM case:
       if (existing) {
         return {
           ...state,
           items: state.items.map(item =>
             item.id === action.payload.id
-              ? { ...item, quantity: item.quantity + (action.payload.quantity || 1) }
+              ? { ...item, quantity: item.quantity + (action.payload.quantity || 1) } // ← ADDS to existing
               : item
           ),
         };

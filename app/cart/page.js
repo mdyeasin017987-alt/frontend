@@ -13,13 +13,15 @@ export default function CartPage() {
     increaseQty,
     decreaseQty,
     removeItem,
+  
   } = useCart();
 
   // কুপন কোড ইনপুট স্টেট
   const [couponCode, setCouponCode] = useState('');
 
-  // প্রতিটি বক্সের জন্য ডেলিভারি চার্জ ৳150 করে ডায়নামিক করা হলো
-  const deliveryCharge = totalQuantity > 0 ? totalQuantity *150 : 0;
+  // ডেলিভারি চার্জ: প্রথম প্রোডাক্টের জন্য ৳150, তারপর প্রতিটা অতিরিক্ত প্রোডাক্টে ৳30 করে যোগ হবে
+  // 0 items -> ৳0, 1 item -> ৳150, 2 items -> ৳180, 3 items -> ৳210, ...
+  const deliveryCharge = totalQuantity > 0 ? 150 + (totalQuantity - 1) * 30 : 0;
 
   return (
     <div className="w-full min-h-screen bg-[#f3f4f6] py-8 px-4 md:px-8 font-sans">
