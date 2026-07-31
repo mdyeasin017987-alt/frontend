@@ -1,9 +1,12 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ChevronDown, CheckCircle2 } from 'lucide-react';
 import { useCart } from '@/app/context/CartContext';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/app/lib/supabaseClient';
+
+// Short reference code for UI display (e.g., SN-A1B2C3D4)
+const generateDisplayId = () => 'SN-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
 const BD_LOCATIONS = {
   Dhaka: {
@@ -68,11 +71,13 @@ export default function CheckoutPage() {
   const [placingOrder, setPlacingOrder] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [submitError, setSubmitError] = useState('');
+  
+  // UI Display ID only (database will auto-generate the actual primary key UUID)
+  const displayOrderId = useRef(generateDisplayId());
 
   const districts = selectedDivision ? Object.keys(BD_LOCATIONS[selectedDivision]) : [];
   const upazilas = (selectedDivision && selectedDistrict) ? BD_LOCATIONS[selectedDivision][selectedDistrict] : [];
 
-  // cart page-এর মতোই: প্রথম প্রোডাক্টে ৳150, তারপর প্রতিটা অতিরিক্ত প্রোডাক্টে ৳30 করে যোগ
   const deliveryCharge = totalQuantity > 0 ? 150 + (totalQuantity - 1) * 30 : 0;
   const grandTotal = totalPrice + deliveryCharge;
 
@@ -99,7 +104,7 @@ export default function CheckoutPage() {
     setPlacingOrder(true);
     setSubmitError('');
 
-    // orders টেবিলের কলাম নামের সাথে মিলিয়ে row object বানানো হলো
+    // Payload exactly matches the Supabase SQL schema
     const orderRow = {
       customer_name: formData.name,
       phone: formData.phone,
@@ -108,11 +113,12 @@ export default function CheckoutPage() {
       upazila: selectedUpazila,
       area: formData.area,
       address_note: formData.note,
-      items: cartItems,          // jsonb column, পুরো cart snapshot হিসেবে সেভ হবে
+      items: cartItems,
       total_price: totalPrice,
       delivery_charge: deliveryCharge,
       grand_total: grandTotal,
       payment_method: paymentMethod,
+      product_id: displayOrderId.current, // For UI display only; actual primary key is auto-generated
     };
 
     const { error } = await supabase.from('orders').insert(orderRow);
@@ -120,7 +126,6 @@ export default function CheckoutPage() {
     setPlacingOrder(false);
 
     if (error) {
-      // network issue, RLS policy block, বা validation fail হলে এখানে ধরা পড়বে
       console.error('Order insert failed:', error);
       setSubmitError('অর্ডার সেভ করা যায়নি। ইন্টারনেট চেক করে আবার চেষ্টা করো।');
       return;
@@ -138,6 +143,9 @@ export default function CheckoutPage() {
         <p className="font-semibold max-w-md">
           Thanks for ordering from SahyesNatural. We'll call you shortly to confirm delivery.
         </p>
+        <p className="font-bold text-sm mt-2 bg-gray-200 px-3 py-1 rounded-full text-black">
+          Reference ID: {displayOrderId.current}
+        </p>
         <button
           onClick={() => router.push('/')}
           className="mt-6 bg-black text-white font-bold px-8 py-3 rounded-full"
@@ -149,7 +157,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8 font-sans text-black">
+    <div className="min-h-screen bg-white p-4 md:p-8 font-sans text-black">
       <div className="max-w-5xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-black text-center mb-10">Enter Your Address</h1>
 
@@ -163,14 +171,16 @@ export default function CheckoutPage() {
             <div className="xl:col-span-2 bg-background border-[3px] border-black rounded-3xl p-6 md:p-8">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-black">Delivery Details</h2>
-                <span className="font-bold text-lg bg-black text-white px-4 py-1 rounded-full">ID: 0x55f</span>
+                <span className="font-bold text-sm md:text-base bg-black text-white px-4 py-1 rounded-full">
+                  Ref: {displayOrderId.current}
+                </span>
               </div>
 
               <InputField label="Name" required className="mb-1">
                 <input
                   value={formData.name}
                   onChange={handleChange('name')}
-                  className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none focus:ring-2 ring-black"
+                  className="bg-amber-50 w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none focus:ring-2 ring-black"
                   placeholder="Your name"
                 />
               </InputField>
@@ -182,7 +192,7 @@ export default function CheckoutPage() {
                     <input
                       value={formData.phone}
                       onChange={handleChange('phone')}
-                      className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none"
+                      className="bg-amber-50 w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none"
                       placeholder="01XXXXXXXXX"
                     />
                   </InputField>
@@ -193,7 +203,7 @@ export default function CheckoutPage() {
                     <input
                       value={formData.area}
                       onChange={handleChange('area')}
-                      className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none"
+                      className="w-full bg-amber-50 border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none"
                       placeholder="e.g. Mirpur"
                     />
                   </InputField>
@@ -246,7 +256,7 @@ export default function CheckoutPage() {
                 <textarea
                   value={formData.note}
                   onChange={handleChange('note')}
-                  className="w-full border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none h-24"
+                  className="w-full bg-amber-50 border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none h-24"
                   placeholder="Optional note"
                 />
               </InputField>
@@ -258,8 +268,11 @@ export default function CheckoutPage() {
               {PAYMENT_METHODS.map((m) => (
                 <button
                   key={m.id}
+                  type="button"
                   onClick={() => setPaymentMethod(m.id)}
-                  className={`w-full flex items-center justify-between p-4 mb-3 border-[3px] border-black rounded-xl transition-all ${paymentMethod === m.id ? 'bg-white' : 'bg-transparent'}`}
+                  className={`w-full flex items-center justify-between p-4 mb-3 border-[3px] border-black rounded-xl transition-all ${
+                    paymentMethod === m.id ? 'bg-white' : 'bg-transparent'
+                  }`}
                 >
                   <span className="font-bold text-lg">{m.label} {m.emoji}</span>
                   {paymentMethod === m.id && <CheckCircle2 className="text-black" />}
@@ -269,10 +282,10 @@ export default function CheckoutPage() {
               <hr className="border-black border-t-[1.5px] my-4" />
 
               <div className="flex flex-col gap-2 font-bold text-black mb-4">
-                <div className="flex justify-between"><span>Subtotal:</span><span>${totalPrice}</span></div>
-                <div className="flex justify-between"><span>Delivery:</span><span>${deliveryCharge}</span></div>
+                <div className="flex justify-between"><span>Subtotal:</span><span>৳{totalPrice}</span></div>
+                <div className="flex justify-between"><span>Delivery:</span><span>৳{deliveryCharge}</span></div>
                 <div className="flex justify-between text-lg border-t-2 border-black pt-2 mt-1">
-                  <span>Total:</span><span>${grandTotal}</span>
+                  <span>Total:</span><span>৳{grandTotal}</span>
                 </div>
               </div>
 
@@ -281,6 +294,7 @@ export default function CheckoutPage() {
               )}
 
               <button
+                type="button"
                 onClick={handlePlaceOrder}
                 disabled={placingOrder}
                 className="w-full mt-2 bg-black text-white font-black text-lg py-4 rounded-xl hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:cursor-not-allowed"

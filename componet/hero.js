@@ -2,7 +2,7 @@
 export default function Hero() {
   return (
     <section
-      className="w-full bg-cover bg-center bg-no-repeat py-14 px-[5vw]"
+      className="w-full bg-cover bg-center bg-lime bg-no-repeat py-14 px-[5vw]"
       style={{
         backgroundImage:
           "url('https://mahesh-2027.my.canva.site/home-product-about-contact-us/_assets/media/e1f5464ea79e036b0baf89eef445e8d2.jpg')",
@@ -22,6 +22,34 @@ export default function Hero() {
           <p className="text-white text-lg leading-6 max-w-[300px] mb-6">
             No stock or wasted coconut, direct farmer to you
           </p>
+
+
+          {/*cheack box */}
+          <div className="flex flex-col  mb-6">
+          <label className="custom-checkbox flex items-center  mb-4">
+            <input type='checkbox'
+              className=''
+              defaultChecked
+              ></input>
+              <span className="text-white ml-2">
+                Pure and organic
+              </span>
+          </label>
+          <label className="custom-checkbox flex items-center  mb-4">
+            <input type='checkbox'
+              className=''  defaultChecked></input>
+              <span className="text-white ml-2">
+                all region
+              </span>
+          </label>
+          <label className="custom-checkbox flex items-center  mb-4">
+            <input type='checkbox'
+              className='' defaultChecked></input>
+              <span className="text-white ml-2">
+                No added ingredent
+              </span>
+          </label>
+          </div>
 
           <div className="flex flex-wrap items-center gap-5 mb-10">
             <button
