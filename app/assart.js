@@ -4,7 +4,7 @@ export const products = [
     price: "135",
     title: "Premium Green Coconut",
     description: "Premium green tender coconut for sweet drinking water.",
-    image: "https://cocogreen.com.bd/public/images/products/112063387533dab.jpg",
+    image: "",
     piece: 4,
     weight: "1.5-1.7 kg"
   },
