@@ -77,7 +77,7 @@ export default function ProductDetailPage() {
             </h1>
 
             <div className="text-4xl md:text-5xl font-black mt-4 mb-2">
-              ${product.price}
+              ৳{product.price}
             </div>
 
             <p className="text-sm md:text-base font-semibold opacity-90 leading-relaxed mb-2 max-w-md">

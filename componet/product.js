@@ -33,7 +33,7 @@ const ProductCard = ({ id, price, rating, description, image, title, piece, weig
         <div className="flex justify-between items-start mb-2">
           {/* Price */}
           <span className="text-[22px] font-extrabold text-black leading-none mt-1">
-            ${price}
+            ৳{price}
           </span>
 
           {/* Rating */}

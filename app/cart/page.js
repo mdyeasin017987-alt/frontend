@@ -116,12 +116,12 @@ export default function CartPage() {
             <div className="flex flex-col gap-4 font-bold text-lg md:text-xl text-black">
               <div className="flex justify-between items-center">
                 <span>Total Price:</span>
-                <span>${totalPrice}</span>
+                <span>৳{totalPrice}</span>
               </div>
 
               <div className="flex justify-between items-center">
                 <span>Delivery:</span>
-                <span>${deliveryCharge}</span>
+                <span>৳{deliveryCharge}</span>
               </div>
             </div>
 
