@@ -23,7 +23,7 @@ export const products = [
     price: "145",
     title: "Premium dimond cutting coconut",
     description: "Premium dimond cutting coconut for sweet drinking water.",
-    image: "https://images.unsplash.com/photo-1553279768-865429fa0078?w=600&q=80",
+    image: "https://say-cle2184.slack.com/files/U0A6243TFR9/F0BMHDJQZT3/file_000000002a7c823092ffa08b601db877.png",
     piece: 6,
     weight: "N/A"
   },
