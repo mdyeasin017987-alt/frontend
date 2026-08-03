@@ -24,7 +24,7 @@ const ProductCard = ({ id, price, rating, description, image, title, piece, weig
         <img
           src={image || 'https://via.placeholder.com/150'} // Placeholder image if none provided
           alt="Product"
-          className="w-full h-full object-contain"
+          className="w-full h-full object-cover"
         />
       </div>
 
