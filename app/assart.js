@@ -56,8 +56,17 @@ export const products = [
   },
   {
     id: 7,
-    price: "600",
+    price: "450",
     title: "supari (betel nut)",
+    description: "Dry supari (betel nut), perfect for traditional uses and rituals.",
+    image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785750864/file_00000000322481f7bdeed48ebb623ac1_egyiyq.png",
+    piece: 2,
+    weight: "Set of 2 bowls"
+  }
+  {
+    id: 8,
+    price: "800",
+    title: "supari (betel nut) ",
     description: "Dry supari (betel nut), perfect for traditional uses and rituals.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785750864/file_00000000322481f7bdeed48ebb623ac1_egyiyq.png",
     piece: 2,
