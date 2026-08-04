@@ -104,35 +104,78 @@ export default function CheckoutPage() {
     setPlacingOrder(true);
     setSubmitError('');
 
-    // Payload exactly matches the Supabase SQL schema
-    const orderRow = {
-      customer_name: formData.name,
-      phone: formData.phone,
-      division: selectedDivision,
-      district: selectedDistrict,
-      upazila: selectedUpazila,
-      area: formData.area,
-      address_note: formData.note,
-      items: cartItems,
-      total_price: totalPrice,
-      delivery_charge: deliveryCharge,
-      grand_total: grandTotal,
-      payment_method: paymentMethod,
-      product_id: displayOrderId.current, // For UI display only; actual primary key is auto-generated
-    };
+    // ---- Cash on Delivery: আগের মতোই সরাসরি insert, পেমেন্ট gateway লাগে না ----
+    if (paymentMethod === 'cod') {
+      const orderRow = {
+        customer_name: formData.name,
+        phone: formData.phone,
+        division: selectedDivision,
+        district: selectedDistrict,
+        upazila: selectedUpazila,
+        area: formData.area,
+        address_note: formData.note,
+        items: cartItems,
+        total_price: totalPrice,
+        delivery_charge: deliveryCharge,
+        grand_total: grandTotal,
+        payment_method: paymentMethod,
+        payment_status: 'pending', // COD মানে delivery-এর সময় পেমেন্ট, তাই confirmed না
+        product_id: displayOrderId.current,
+      };
 
-    const { error } = await supabase.from('orders').insert(orderRow);
+      const { error } = await supabase.from('orders').insert(orderRow);
+      setPlacingOrder(false);
 
-    setPlacingOrder(false);
+      if (error) {
+        console.error('Order insert failed:', error);
+        setSubmitError('অর্ডার সেভ করা যায়নি। ইন্টারনেট চেক করে আবার চেষ্টা করো।');
+        return;
+      }
 
-    if (error) {
-      console.error('Order insert failed:', error);
-      setSubmitError('অর্ডার সেভ করা যায়নি। ইন্টারনেট চেক করে আবার চেষ্টা করো।');
+      setOrderPlaced(true);
+      clearCart();
       return;
     }
 
-    setOrderPlaced(true);
-    clearCart();
+    // ---- Card / bKash: server route দিয়ে BDGate session বানানো হবে ----
+    // লক্ষ্য করো: এখানে price client থেকে পাঠানো হচ্ছে UI-তে দেখানোর জন্য,
+    // কিন্তু /api/payments/initiate route এটা trust করে না — নিজে Supabase
+    // থেকে price আবার ভেরিফাই করে। এটাই defense-in-depth।
+    try {
+      const res = await fetch('/api/payments/initiate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          customerInfo: {
+            name: formData.name,
+            phone: formData.phone,
+            division: selectedDivision,
+            district: selectedDistrict,
+            upazila: selectedUpazila,
+            area: formData.area,
+            note: formData.note,
+          },
+          items: cartItems,
+          deliveryCharge,
+        }),
+      });
+
+      const data = await res.json();
+      setPlacingOrder(false);
+
+      if (!res.ok) {
+        setSubmitError(data.error || 'পেমেন্ট শুরু করা যায়নি। আবার চেষ্টা করো।');
+        return;
+      }
+
+      // cart এখনো clear করছি না — পেমেন্ট fail/cancel হলে user যেন cart হারিয়ে না ফেলে।
+      // clearCart() হবে /order/success পেজে, webhook confirm হওয়ার পর।
+      window.location.href = data.paymentUrl;
+    } catch (err) {
+      console.error('Payment initiate failed:', err);
+      setPlacingOrder(false);
+      setSubmitError('নেটওয়ার্ক সমস্যা হয়েছে। আবার চেষ্টা করো।');
+    }
   };
 
   if (orderPlaced) {
