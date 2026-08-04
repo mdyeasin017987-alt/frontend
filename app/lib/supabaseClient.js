@@ -11,5 +11,7 @@ import 'dotenv/config';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
+console.log("SERVICE_ROLE_KEY:", process.env.SUPABASE_SERVICE_ROLE_KEY ? "Loaded" : "Missing");
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
