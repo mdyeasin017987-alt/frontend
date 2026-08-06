@@ -10,7 +10,7 @@
 //   3. Supabase-এ "pending" status দিয়ে order insert হয় (service_role client দিয়ে)
 //   4. BDGate-কে POST করে payment session বানানো হয়
 //   5. payment_url client-কে ফেরত দেওয়া হয় redirect করার জন্য
-
+/*
 import { supabaseAdmin } from '@/app/lib/supabaseAdmin';
 import 'dotenv/config';
 
@@ -82,21 +82,22 @@ export async function POST(request) {
     }
 
     // ---- BDGate-কে payment session তৈরির অনুরোধ ----
-    const bdgateRes = await fetch(`${process.env.BDGATE_BASE_URL}/api/payments/initiate`, {
+    const bdgateRes = await fetch(`https://api.bdgate.net/api/v1`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${process.env.BDGATE_API_KEY}`,
+        "x-api-key": `bd_test_149cbb37633da0224d66f142d577176225817537`, // ✅ use env var
       },
       body: JSON.stringify({
         full_name: customerInfo.name,
-        email: customerInfo.email || 'no-email@daabhut.com', // BDGate email required করে, কিন্তু checkout form-এ email নাই
-        amount: grandTotal,
+        email: customerInfo.email || 'no-email@yourdomain.com',
+        amount: Number(grandTotal), // ✅ ensure numeric
         metadata: { order_id: order.id },
-        redirect_url: `${process.env.NEXT_PUBLIC_SITE_URL}/order/success?orderId=${order.id}`,
-        cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/order/cancelled?orderId=${order.id}`,
+        redirect_url: `http://localhost:3000/order/success?orderId=${order.id}`,
+        cancel_url: `http://localhost:3000/order/cancelled?orderId=${order.id}`,
       }),
     });
+
 
     if (!bdgateRes.ok) {
       // BDGate call ব্যর্থ হলে order-টা "failed" করে রাখা ভালো, অনির্দিষ্টকাল pending না রেখে
@@ -120,4 +121,4 @@ export async function POST(request) {
     console.error('Payment initiate error:', err);
     return Response.json({ error: 'Something went wrong' }, { status: 500 });
   }
-}
+}*/

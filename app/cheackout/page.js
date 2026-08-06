@@ -25,8 +25,8 @@ const BD_LOCATIONS = {
 };
 
 const PAYMENT_METHODS = [
-  { id: 'cod', label: 'Cash on Delivery', emoji: '🚚' },
-  { id: 'card', label: 'Credit Card, bKash', emoji: '💳' },
+  { id: 'delivery', label: 'Delivery Charge only', emoji: '🚚' },
+  { id: 'full', label: 'Full Payment', emoji: '💳' },
 ];
 
 const InputField = ({ label, required, children, className = '' }) => (
@@ -59,19 +59,18 @@ const SelectField = ({ label, required, value, onChange, disabled, options, plac
 );
 
 export default function CheckoutPage() {
-  const { items: cartItems, totalPrice, totalQuantity, clearCart } = useCart();
+  const { items: cartItems, totalPrice, totalQuantity } = useCart();
   const router = useRouter();
 
   const [formData, setFormData] = useState({ name: '', phone: '', area: '', address: '', note: '' });
-  const [paymentMethod, setPaymentMethod] = useState('cod');
+  const [paymentMethod, setPaymentMethod] = useState('delivery');
   const [selectedDivision, setSelectedDivision] = useState('');
   const [selectedDistrict, setSelectedDistrict] = useState('');
   const [selectedUpazila, setSelectedUpazila] = useState('');
   const [errors, setErrors] = useState({});
   const [placingOrder, setPlacingOrder] = useState(false);
-  const [orderPlaced, setOrderPlaced] = useState(false);
   const [submitError, setSubmitError] = useState('');
-  
+
   // UI Display ID only (database will auto-generate the actual primary key UUID)
   const displayOrderId = useRef(generateDisplayId());
 
@@ -104,100 +103,50 @@ export default function CheckoutPage() {
     setPlacingOrder(true);
     setSubmitError('');
 
-    // ---- Cash on Delivery: আগের মতোই সরাসরি insert, পেমেন্ট gateway লাগে না ----
-    if (paymentMethod === 'cod') {
-      const orderRow = {
-        customer_name: formData.name,
-        phone: formData.phone,
-        division: selectedDivision,
-        district: selectedDistrict,
-        upazila: selectedUpazila,
-        area: formData.area,
-        address_note: formData.note,
-        items: cartItems,
-        total_price: totalPrice,
-        delivery_charge: deliveryCharge,
-        grand_total: grandTotal,
-        payment_method: paymentMethod,
-        payment_status: 'pending', // COD মানে delivery-এর সময় পেমেন্ট, তাই confirmed না
-        product_id: displayOrderId.current,
-      };
+    // ---- উভয় payment method-ই একই shape-এর order insert করে, শুধু ----
+    // /app/payment page-এ পাঠানো amount আলাদা হয়:
+    //  - Delivery Payment: শুধু deliveryCharge advance পাঠাতে হবে (bKash/Nagad),
+    //    বাকি পণ্যের দাম ডেলিভারির সময় হাতে দেবে।
+    //  - Full Payment: পুরো grandTotal আগেই পাঠাতে হবে।
+    // দুটোতেই কোনো automated gateway (BDGate) নেই বলে, TrxID manual verify
+    // হওয়ার আগ পর্যন্ত payment_status 'pending' থাকে, /app/payment-এ সাবমিট
+    // করলে 'pending_verification' হয়।
+    const orderRow = {
+      customer_name: formData.name,
+      phone: formData.phone,
+      division: selectedDivision,
+      district: selectedDistrict,
+      upazila: selectedUpazila,
+      area: formData.area,
+      address_note: formData.note,
+      items: cartItems,
+      total_price: totalPrice,
+      delivery_charge: deliveryCharge,
+      grand_total: grandTotal,
+      payment_method: paymentMethod,
+      status: 'pending',
+      product_id: displayOrderId.current,
+    };
+    const { data: insertedOrder, error } = await supabase
+      .from('orders')
+      .insert(orderRow)
+      .select('id')
+      .single();
 
-      const { error } = await supabase.from('orders').insert(orderRow);
-      setPlacingOrder(false);
 
-      if (error) {
-        console.error('Order insert failed:', error);
-        setSubmitError('অর্ডার সেভ করা যায়নি। ইন্টারনেট চেক করে আবার চেষ্টা করো।');
-        return;
-      }
+    setPlacingOrder(false);
 
-      setOrderPlaced(true);
-      clearCart();
+    if (error) {
+      console.error('Order insert failed:', error);
+      setSubmitError('অর্ডার সেভ করা যায়নি। ইন্টারনেট চেক করে আবার চেষ্টা করো।');
       return;
     }
 
-    // ---- Card / bKash: server route দিয়ে BDGate session বানানো হবে ----
-    // লক্ষ্য করো: এখানে price client থেকে পাঠানো হচ্ছে UI-তে দেখানোর জন্য,
-    // কিন্তু /api/payments/initiate route এটা trust করে না — নিজে Supabase
-    // থেকে price আবার ভেরিফাই করে। এটাই defense-in-depth।
-    try {
-      const res = await fetch('/api/payments/initiate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          customerInfo: {
-            name: formData.name,
-            phone: formData.phone,
-            division: selectedDivision,
-            district: selectedDistrict,
-            upazila: selectedUpazila,
-            area: formData.area,
-            note: formData.note,
-          },
-          items: cartItems,
-          deliveryCharge,
-        }),
-      });
-
-      const data = await res.json();
-      setPlacingOrder(false);
-
-      if (!res.ok) {
-        setSubmitError(data.error || 'পেমেন্ট শুরু করা যায়নি। আবার চেষ্টা করো।');
-        return;
-      }
-
-      // cart এখনো clear করছি না — পেমেন্ট fail/cancel হলে user যেন cart হারিয়ে না ফেলে।
-      // clearCart() হবে /order/success পেজে, webhook confirm হওয়ার পর।
-      window.location.href = data.paymentUrl;
-    } catch (err) {
-      console.error('Payment initiate failed:', err);
-      setPlacingOrder(false);
-      setSubmitError('নেটওয়ার্ক সমস্যা হয়েছে। আবার চেষ্টা করো।');
-    }
+    // cart এখনো clear করছি না — TrxID সাবমিট না হওয়া পর্যন্ত cart থাকুক,
+    // যাতে user মাঝপথে ফিরে এলেও অর্ডার হারিয়ে না যায়।
+    const amountToPay = paymentMethod === 'delivery' ? deliveryCharge : grandTotal;
+    router.push(`/payment?orderId=${insertedOrder.id}&amount=${amountToPay}&type=${paymentMethod}`);
   };
-
-  if (orderPlaced) {
-    return (
-      <div className="min-h-screen bg-background flex flex-col items-center justify-center p-8 text-center">
-        <CheckCircle2 size={64} className="text-black mb-4" />
-        <h1 className="text-3xl md:text-4xl font-black mb-2">Order Placed!</h1>
-        <p className="font-semibold max-w-md">
-          Thanks for ordering from SahyesNatural. We'll call you shortly to confirm delivery.
-        </p>
-        <p className="font-bold text-sm mt-2 bg-gray-200 px-3 py-1 rounded-full text-black">
-          Reference ID: {displayOrderId.current}
-        </p>
-        <button
-          onClick={() => router.push('/')}
-          className="mt-6 bg-black text-white font-bold px-8 py-3 rounded-full"
-        >
-          Back to Home
-        </button>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-white p-4 md:p-8 font-sans text-black">
@@ -313,9 +262,8 @@ export default function CheckoutPage() {
                   key={m.id}
                   type="button"
                   onClick={() => setPaymentMethod(m.id)}
-                  className={`w-full flex items-center justify-between p-4 mb-3 border-[3px] border-black rounded-xl transition-all ${
-                    paymentMethod === m.id ? 'bg-white' : 'bg-transparent'
-                  }`}
+                  className={`w-full flex items-center justify-between p-4 mb-3 border-[3px] border-black rounded-xl transition-all ${paymentMethod === m.id ? 'bg-white' : 'bg-transparent'
+                    }`}
                 >
                   <span className="font-bold text-lg">{m.label} {m.emoji}</span>
                   {paymentMethod === m.id && <CheckCircle2 className="text-black" />}
@@ -349,5 +297,5 @@ export default function CheckoutPage() {
         )}
       </div>
     </div>
-  );
-}
+  )
+};

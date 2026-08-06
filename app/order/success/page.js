@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { CheckCircle2, Loader2 } from 'lucide-react';
@@ -105,4 +105,4 @@ export default function OrderSuccessPage() {
       <SuccessContent />
     </Suspense>
   );
-}
+}*/

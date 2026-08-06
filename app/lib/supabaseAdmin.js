@@ -10,8 +10,8 @@
 import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseUrl = "https://vnttqxrecxbpulyvrjyk.supabase.co";
+const serviceRoleKey ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudHRxeHJlY3hicHVseXZyanlrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTMxNTI4NCwiZXhwIjoyMTAwODkxMjg0fQ.Et8v4gBrN7WrSL7F-V4VJlOT7-0YIBrW6HLiS3HMINg";
 
 if (!supabaseUrl || !serviceRoleKey) {
   throw new Error('Missing Supabase admin env vars — check .env.local');

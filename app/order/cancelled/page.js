@@ -1,4 +1,4 @@
-"use client";
+/*"use client";
 import { useRouter } from 'next/navigation';
 
 export default function OrderCancelledPage() {
@@ -15,4 +15,4 @@ export default function OrderCancelledPage() {
       </button>
     </div>
   );
-}
+}*/

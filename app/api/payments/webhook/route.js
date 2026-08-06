@@ -6,7 +6,7 @@
 // ⚠️ SECURITY: raw body-এর উপর signature verify করা mandatory।
 // এটা স্কিপ করলে যে কেউ curl দিয়ে fake "payment.completed" পাঠিয়ে
 // বিনা টাকায় order fulfill করিয়ে নিতে পারবে।
-
+/*
 import crypto from 'crypto';
 import 'dotenv/config';
 import { supabaseAdmin } from '@/app/lib/supabaseAdmin';
@@ -32,7 +32,7 @@ export async function POST(request) {
   const rawBody = await request.text();
   const signature = request.headers.get('x-bdgate-signature');
 
-  const isValid = verifySignature(rawBody, signature, process.env.BDGATE_WEBHOOK_SECRET);
+  const isValid = verifySignature(rawBody, signature, "b541c02ee0004de69a90d11d1c95c9dc104284600489129ea2bf4c4e3c00cbe9");
 
   if (!isValid) {
     console.warn('Webhook signature mismatch — possible spoof attempt');
@@ -103,4 +103,4 @@ export async function POST(request) {
 
   // BDGate শুধু 2xx পেলে "delivered" ধরে নেয়, নাহলে retry করতে থাকবে
   return new Response('OK', { status: 200 });
-}
+} */
