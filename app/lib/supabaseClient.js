@@ -11,7 +11,5 @@ import 'dotenv/config';
 
 const supabaseUrl = "https://vnttqxrecxbpulyvrjyk.supabase.co";
 const supabaseAnonKey ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZudHRxeHJlY3hicHVseXZyanlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzMTUyODQsImV4cCI6MjEwMDg5MTI4NH0.NJ7xpbBfS1jiwjW8PFxqQ6abtRkTqdAIsgNTcjXz184";
-console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
-console.log("SERVICE_ROLE_KEY:", process.env.SUPABASE_SERVICE_ROLE_KEY ? "Loaded" : "Missing");
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
