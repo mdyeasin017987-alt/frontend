@@ -73,7 +73,7 @@ export function CartProvider({ children }) {
   const [state, dispatch] = useReducer(cartReducer, initialState, (initial) => {
     if (typeof window === 'undefined') return initial;
     try {
-      const saved = localStorage.getItem('daabhut_cart');
+      const saved = localStorage.getItem('sahyesnatural_cart');
       return saved ? { ...initial, items: JSON.parse(saved) } : initial;
     } catch {
       return initial;
@@ -81,7 +81,7 @@ export function CartProvider({ children }) {
   });
 
   useEffect(() => {
-    localStorage.setItem('daabhut_cart', JSON.stringify(state.items));
+    localStorage.setItem('sahyesnatural_cart', JSON.stringify(state.items));
   }, [state.items]);
 
   // price DB তে string ("500") হিসেবে আছে, তাই সবসময় Number() দিয়ে coerce করছি
@@ -99,7 +99,7 @@ export function CartProvider({ children }) {
         name: product.title,
         price: Number(product.price),
         image: product.image,
-        piece: product.piece,
+        piece: Number(product.piece),
         weight: product.weight,
         quantity,
       },

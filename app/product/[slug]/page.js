@@ -85,7 +85,7 @@ export default function ProductDetailPage() {
             </p>
 
             <p className="text-sm md:text-base font-semibold text-green-700 mb-6">
-              {product.piece} pc · {product.weight}
+              {product.piece} piece · {product.weight}
             </p>
 
             {/* কোয়ান্টিটি কাউন্টার সেকশন */}

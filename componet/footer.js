@@ -1,96 +1,74 @@
 import Link from 'next/link';
 import React from 'react';
 
-function Footer() {
+export default function Footer() {
   return (
-    // বাইরের ব্যাকগ্রাউন্ড ফ্রেম যা ইমেজটির মতো দেখাবে
-    <div className="w-full overflow-hidden  bg-[#85ff10] flex items-center justify-center p-4 md:p-8">
-
-      {/* মূল ফুটার কন্টেইনার (উজ্জ্বল লাইম গ্রিন ব্যাকগ্রাউন্ড) */}
-      <footer className="w-full h-full  bg-[#85ff10] text-black font-sans p-6 md:p-12 lg:p-16 rounded-sm shadow-sm select-none">
-
-        {/* লোগো সেকশন */}
-        <div className="mb-4">
-          <h1 className="text-5xl md:text-8xl sm:text-6xl font-black tracking-tight leading-none text-black select-all">
-            SahyesNatural
-          </h1>
-        </div>
-
-        {/* প্রথম বিভাজক রেখা (Top Divider Line) */}
-        <hr className="border-black border-t-[1.5px] opacity-100 my-4" />
-
-        {/* মূল কন্টেন্ট গ্রিড (রেসপনসিভ লেআউট) */}
-        <div className="grid grid-cols-[auto_1fr] gap-6 md:gap-16 lg:gap-24 py-4 items-start">
-
-          {/* বাম দিকের সোশ্যাল মিডিয়া আইকনগুলোর ভার্টিকাল স্ট্যাক */}
-          <div className="flex flex-col gap-5 text-black">
-            {/* ফেসবুক আইকন */}
-            <Link href="https://www.facebook.com/share/1Hv5zqCsf6/" aria-label="Facebook" className="hover:opacity-75 transition-opacity">
-              <svg className="w-7 h-7 md:w-9 md:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
-              </svg>
-            </Link>
-
-            {/* ইনস্টাগ্রাম আইকন */}
-            <Link href="#" aria-label="Instagram" className="hover:opacity-75 transition-opacity">
-              <svg className="w-7 h-7 md:w-9 md:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
-              </svg>
-            </Link>
-
-            {/* ইউটিউব আইকন */}
-            <Link href="#" aria-label="YouTube" className="hover:opacity-75 transition-opacity">
-              <svg className="w-7 h-7 md:w-9 md:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
-                <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
-              </svg>
-            </Link>
-
-            {/* টিকটক আইকন */}
-            <Link href="#" aria-label="TikTok" className="hover:opacity-75 transition-opacity">
-              <svg className="w-7 h-7 md:w-9 md:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
-              </svg>
-            </Link>
-          </div>
-
-          {/* ডান দিকের টেক্সট ও লিংক সেকশন */}
-          <div className="flex flex-col gap-4">
-
-            {/* About us শিরোনাম */}
-            <h2 className="text-lg md:text-xl font-bold tracking-normal text-black">
-              About us
+    <footer className="bg-[--background] text-black">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid gap-12 lg:grid-cols-[2fr_1fr_1fr]">
+          <div className="space-y-6">
+            <h2 className="text-4xl font-black tracking-tight text-black sm:text-5xl">
+              SahyesNatural
             </h2>
-
-            {/* বিবরণী প্যারাগ্রাফ (হুবহু ইমেজের টেক্সট মিলানো হয়েছে) */}
-            <p className="text-base md:text-xl lg:text-2xl font-bold leading-snug md:leading-normal text-black max-w-3xl">
-              SahyesNatural is provider of natural and organic products, dedicated to promoting a healthier lifestyle. Our mission is to offer high-quality, eco-friendly alternatives that support both personal well-being and environmental sustainability. We believe in the power of nature to enhance everyday life, and we are committed to sourcing our products responsibly and ethically.
+            <p className="max-w-xl text-sm leading-7 text-[#2f3f32] sm:text-base">
+              SahyesNatural delivers fresh, organic coconut products with a focus on quality,
+              sustainability, and customer trust. We source from responsible farms and ship with
+              eco-friendly care.
             </p>
-
-            {/* নিচের লিংকগুলো */}
-            <div className="flex flex-wrap gap-x-8 gap-y-2 mt-2 text-lg md:text-xl font-bold text-black">
-              <Link href="#" className="hover:underline">Contacts us</Link>
-              <Link href="#" className="hover:underline">support</Link>
+            <div className="flex items-center gap-4">
+              <Link
+                href="https://www.facebook.com/share/1Hv5zqCsf6/"
+                aria-label="Facebook"
+                className="rounded-full border border-black/10 bg-white p-3 text-black transition hover:bg-[#e8f4e8]"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                </svg>
+              </Link>
+              <Link href="#" aria-label="Instagram" className="rounded-full border border-black/10 bg-white p-3 text-black transition hover:bg-[#fdf0f6]">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </Link>
+              <Link href="#" aria-label="YouTube" className="rounded-full border border-black/10 bg-white p-3 text-black transition hover:bg-[#fff3f3]">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+                  <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" />
+                </svg>
+              </Link>
             </div>
+          </div>
 
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f4725]">
+              Quick links
+            </h3>
+            <div className="mt-6 space-y-3 text-sm text-[#374045]">
+              <Link href="/" className="block hover:text-black">Home</Link>
+              <Link href="/products" className="block hover:text-black">Products</Link>
+              <Link href="/cart" className="block hover:text-black">Cart</Link>
+              <Link href="#" className="block hover:text-black">Support</Link>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="text-sm font-semibold uppercase tracking-[0.2em] text-[#1f4725]">
+              Contact
+            </h3>
+            <div className="mt-6 space-y-3 text-sm text-[#374045]">
+              <a href="mailto:info@sahyesnatural.com" className="block hover:text-black">sayhesnatural@gmail.com</a>
+              <a href="tel:+880123456789" className="block hover:text-black">+8801805093255</a>
+              <p className="pt-2 text-sm text-[#515d53]">Open daily 9am–6pm</p>
+            </div>
           </div>
         </div>
 
-        {/* দ্বিতীয় বিভাজক রেখা (Bottom Divider Line) */}
-        <hr className="border-black border-t-[1.5px] opacity-100 my-4" />
-
-        {/* কপিরাইট নোটিশ (সেন্টারড টেক্সট) */}
-        <div className="text-center mt-6">
-          <p className="text-xs md:text-sm font-semibold tracking-wide text-black opacity-80">
-            copyright 2026 all right reserve
-          </p>
+        <div className="mt-16 border-t border-black/10 pt-8 text-center text-xs uppercase tracking-[0.18em] text-black/70">
+          © 2026 SahyesNatural. All rights reserved.
         </div>
-
-      </footer>
-    </div>
+      </div>
+    </footer>
   );
 }
-
-export default Footer;

@@ -21,8 +21,10 @@ import { supabase } from '@/app/lib/supabaseClient';
 
 // TODO: নিজের আসল bKash/Nagad Personal নাম্বার দিয়ে বদলে নাও
 const PAYMENT_NUMBERS = [
-  { provider: 'bKash', type: 'Personal', number: '01XXXXXXXXX' },
-  { provider: 'Nagad', type: 'Personal', number: '01XXXXXXXXX' },
+  { provider: 'bKash', type: 'Personal', number: '01805093255' },
+  { provider: 'Nagad', type: 'Personal', number: '01805093255' },
+  { provider: 'Farhan', type: 'Personal', number: '01805093255' },
+  { provider: 'Rocket', type: 'Personal', number: '01805093255' },
 ];
 
 function CopyableNumber({ number }) {
@@ -57,6 +59,7 @@ function PaymentContent() {
   const amount = params.get('amount');
   const paymentType = params.get('type'); // 'delivery' | 'full'
   const isDeliveryAdvance = paymentType === 'delivery';
+  const isdakhgor = paymentType == "ডাকঘর"
 
   const [transactionId, setTransactionId] = useState('');
   const [senderNumber, setSenderNumber] = useState('');
@@ -116,6 +119,8 @@ function PaymentContent() {
           {isDeliveryAdvance
             ? 'ডেলিভারি চার্জের পেমেন্ট আমরা যাচাই করে অর্ডার কনফার্ম করবো। বাকি টাকা পণ্য হাতে পাওয়ার সময় দিও।'
             : 'আমরা তোমার পেমেন্ট যাচাই করে শীঘ্রই কনফার্ম করবো। যাচাই শেষ হলে ফোনে জানানো হবে।'}
+
+          {isdakhgor && "আমরা তোমার পেমেন্ট যাচাই করে শীঘ্রই কনফার্ম করবো। যাচাই শেষ হলে ফোনে জানানো হবে। thanks :)"}
         </p>
         <button
           onClick={() => router.push('/')}
@@ -131,7 +136,8 @@ function PaymentContent() {
     <div className="min-h-screen bg-white p-4 md:p-8 font-sans text-black">
       <div className="max-w-xl mx-auto">
         <h1 className="text-3xl md:text-4xl font-black text-center mb-8">
-          {isDeliveryAdvance ? 'Delivery Charge Payment' : 'Full Payment'}
+          {!isdakhgor ? (isDeliveryAdvance ? 'Delivery Charge Payment' : 'Full Payment') : "ডাকঘর পেমেন্ট"}
+
         </h1>
 
         <div className="bg-background border-[3px] border-black rounded-3xl p-6 md:p-8 mb-6">
@@ -144,19 +150,24 @@ function PaymentContent() {
               </div>
             ))}
           </div>
-          {amount && (
-            <p className="font-bold text-lg mt-4 border-t-2 border-black pt-3">
-              {isDeliveryAdvance ? 'ডেলিভারি চার্জ' : 'পরিমাণ'}: ৳{amount}
-            </p>
-          )}
+          {!isdakhgor ? (
+             amount && (
+              <p className="font-bold text-lg mt-4 border-t-2 border-black pt-3">
+                {isDeliveryAdvance ? 'ডেলিভারি চার্জ' : 'পরিমাণ'}: ৳{amount}
+              </p>
+            )) : ""}
           {isDeliveryAdvance && (
             <p className="text-sm font-semibold mt-2 text-gray-700">
               এটা শুধু ডেলিভারি চার্জ — বাকি পণ্যের দাম ডেলিভারির সময় হাতে দিও।
             </p>
           )}
+
+          {!isdakhgor? (
           <p className="text-sm font-semibold mt-3 text-gray-700">
             টাকা পাঠানোর পর যে Transaction ID (TrxID) পাবে, সেটা নিচে দাও।
-          </p>
+          </p>):  <p className="text-sm font-semibold mt-3 text-shadow-blue-400">
+            Payment পর যে Transaction ID (TrxID) পাবে, সেটা নিচে দাও।
+          </p>}
         </div>
 
         <div className="bg-background border-[3px] border-black rounded-3xl p-6 md:p-8">

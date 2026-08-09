@@ -1,86 +1,109 @@
-// components/Hero.jsx
-export default function Hero() {
+"use client"
+
+const fruits = [
+  'https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png',
+  'https://res.cloudinary.com/zlegm9or/image/upload/v1785753712/file_000000009c3482078ce71ee0abdfcc37_apc0i5.png',
+  'https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png',
+  'https://res.cloudinary.com/zlegm9or/image/upload/v1785753063/file_00000000f3d08211b85211c514c7321c_tlubxr.png',
+]
+
+export default function Home() {
   return (
-    <section
-      className="w-full bg-cover bg-center bg-lime bg-no-repeat py-14 px-[5vw]"
-      style={{
-        backgroundImage:
-          "url('https://mahesh-2027.my.canva.site/home-product-about-contact-us/_assets/media/e1f5464ea79e036b0baf89eef445e8d2.jpg')",
-      }}
-    >
-      <div className="max-w-[1180px] mx-auto flex flex-wrap items-center justify-around gap-8">
-        {/* Content */}
-        <div className="flex-1 min-w-[320px] max-w-[460px]">
-          <h1 className="font-anton text-white leading-[0.95] capitalize tracking-[0.5px] text-[clamp(5.2rem,4.5vw,6.9rem)]">
-            100% Pure
+    <main className="min-h-screen bg-[#fbfaf5] text-[#123d29]">
+      {/* Hero */}
+      <section className="relative overflow-hidden px-4 pt-10 text-center md:px-6 lg:px-8 lg:pt-14">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 rounded-full border border-[#e4e2d6] bg-white px-4 py-2 text-sm font-semibold text-[#31552c]">
+          <span aria-hidden="true">🥥</span>
+          100% Fresh Coconuts
+        </div>
+
+        {/* Heading with accent tick marks */}
+        <div className="relative mx-auto mt-6 max-w-5xl">
+          <svg
+            viewBox="0 0 60 60"
+            className="pointer-events-none absolute -top-6 left-1/2 h-12 w-12 -translate-x-[190px] text-[#123d29] sm:-translate-x-[230px] md:-translate-x-[260px]"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            aria-hidden="true"
+          >
+            <path d="M30 6 L30 22" />
+            <path d="M14 14 L24 24" />
+            <path d="M6 30 L22 30" />
+          </svg>
+
+          <h1 className="font-serif text-5xl font-medium leading-none tracking-tight text-[#103d29] sm:text-6xl md:text-7xl lg:text-8xl xl:text-[6.5rem]">
+            Taste Nature&apos;s
+            <br />
+            Freshness
           </h1>
+        </div>
 
-          <h1 className="font-anton text-[clamp(6.9rem,5.2vw,7.2rem)] leading-[0.95] capitalize tracking-[0.5px] text-lime mb-4">
-            Coconut
-          </h1>
+        <p className="mx-auto mt-6 max-w-3xl text-sm leading-7 text-[#657067] sm:text-base md:text-lg">
+          Welcome to Fresh Coconut Market, your trusted destination for
+          premium-quality, farm-fresh fruits. We bring nature&apos;s finest
+          harvest directly from local farms.
+        </p>
 
-          <p className="text-white text-lg leading-6 max-w-[300px] mb-6">
-            No stock or wasted coconut, direct farmer to you
-          </p>
+        <div className="mx-auto mt-8 flex max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
+          <button className="inline-flex items-center justify-center gap-2 rounded-full bg-[#18a33d] px-6 py-4 text-base font-semibold text-white shadow-lg shadow-green-600/20 hover:bg-[#149034]">
+            Order Today
+            <span aria-hidden="true">🛍</span>
+          </button>
 
-
-          {/*cheack box */}
-          <div className="flex flex-col  mb-6">
-          <label className="custom-checkbox flex items-center  mb-4">
-            <input type='checkbox'
-              className=''
-              defaultChecked
-              ></input>
-              <span className="text-white ml-2">
-                Pure and organic
-              </span>
-          </label>
-          <label className="custom-checkbox flex items-center  mb-4">
-            <input type='checkbox'
-              className=''  defaultChecked></input>
-              <span className="text-white ml-2">
-                all region
-              </span>
-          </label>
-          <label className="custom-checkbox flex items-center  mb-4">
-            <input type='checkbox'
-              className='' defaultChecked></input>
-              <span className="text-white ml-2">
-                No added ingredent
-              </span>
-          </label>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-5 mb-10">
-            <button
-              type="button"
-              className="flex items-center gap-2 bg-lime text-forest-green px-5 py-2.5 rounded-full font-semibold"
+          <button className="inline-flex items-center justify-center gap-2 rounded-full border border-[#dddcd4] bg-white px-6 py-4 text-base font-semibold text-[#26332c] hover:border-[#c8c6bc]">
+            Track Order
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
             >
-              <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <circle cx="9" cy="21" r="1" />
-                <circle cx="20" cy="21" r="1" />
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-              </svg>
-              Add to Cart
-            </button>
-
-            <a href="#" className="text-lime font-medium text-lg inline-flex items-center gap-2">
-              view product →
-            </a>
-          </div>
-
-          <p className="text-white text-base font-medium">stay healthy, stay safe.</p>
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 3" />
+            </svg>
+          </button>
         </div>
 
-        {/* Image */}
-        <div className="flex-[1.3] min-w-[300px] flex justify-center items-center">
-          <img
-            src="https://mahesh-2027.my.canva.site/home-product-about-contact-us/_assets/media/09dd688a15623823b2e9e4301c20d546.png"
-            alt="Fresh green coconut"
-            className="w-full max-w-[50rem] object-cover drop-shadow-[0_20px_25px_rgba(0,0,0,0.25)]"
-          />
+        {/* Fruit gallery — sits on a shallow arc, both outer tiles rise to match the inner ones */}
+        <div className="mx-auto mt-16 grid max-w-7xl grid-cols-2 gap-3 sm:gap-4 lg:mt-24 lg:grid-cols-4 lg:gap-5">
+          {fruits.map((src, index) => {
+            const arcStyle =
+              index === 0
+                ? { transform: 'perspective(600px) rotateY(6deg) rotateZ(-2deg)', transformOrigin: 'bottom right' }
+                : index === 3
+                ? { transform: 'perspective(600px) rotateY(-6deg) rotateZ(2deg)', transformOrigin: 'bottom left' }
+                : {}
+
+            return (
+              <div
+                key={index}
+                className="group relative h-40 overflow-hidden sm:h-52 lg:h-64"
+                style={arcStyle}
+              >
+                <img
+                  src={src}
+                  alt="Fresh fruit"
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                  sizes="(max-width:640px) 50vw, (max-width:1024px) 50vw, 25vw"
+                />
+              </div>
+            )
+          })}
         </div>
-      </div>
-    </section>
-  );
+
+        {/* Curved fade into the section below, spanning the whole row */}
+        <div
+          className="pointer-events-none relative mx-auto -mt-10 h-16 max-w-7xl rounded-[100%] bg-[#fbfaf5] sm:h-20"
+          aria-hidden="true"
+        />
+      </section>
+    </main>
+  )
 }

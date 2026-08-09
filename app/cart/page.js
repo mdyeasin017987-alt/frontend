@@ -2,10 +2,12 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useCart } from '@/app/context/CartContext';
+import { ChevronDown, CheckCircle2 } from 'lucide-react';
 
 export default function CartPage() {
   // CartContext থেকে সত্যিকারের cart state আসছে,
   // যেটা product page এর "Add to Cart" বাটন থেকে populate হয়
+  const [paymentMethod, setPaymentMethod] = useState('Home');
   const {
     items: cartItems,
     totalQuantity,
@@ -13,16 +15,30 @@ export default function CartPage() {
     increaseQty,
     decreaseQty,
     removeItem,
-  
+
   } = useCart();
 
+  const PAYMENT_METHODS = [
+    { id: 'Home', label: 'Home delivery', emoji: '🚚' },
+    { id: 'dakhgor', label: 'dakhgor delivery', emoji: '🚚' },
+  ];
+
+  const handlePlaceOder = ()=>{
+    
+    router.push(`/payment?orderId=${insertedOrder.id}&amount=${amountToPay}&type=${paymentMethod}`);
+  }
   // কুপন কোড ইনপুট স্টেট
   const [couponCode, setCouponCode] = useState('');
+  console.log(paymentMethod)
 
   // ডেলিভারি চার্জ: প্রথম প্রোডাক্টের জন্য ৳150, তারপর প্রতিটা অতিরিক্ত প্রোডাক্টে ৳30 করে যোগ হবে
   // 0 items -> ৳0, 1 item -> ৳150, 2 items -> ৳180, 3 items -> ৳210, ...
-  const deliveryCharge = totalQuantity > 0 ? 150 + (totalQuantity - 1) * 30 : 0;
+  let deliveryCharge = totalQuantity > 0 ? 150 + (totalQuantity - 1) * 30 : 0;
 
+  if (paymentMethod.id == "dakhgor"){
+    deliveryCharge = 50
+    console.log(paymentMethod)
+  }
   return (
     <div className="w-full min-h-screen bg-[#f3f4f6] py-8 px-4 md:px-8 font-sans">
       <div className="max-w-6xl mx-auto">
@@ -121,7 +137,7 @@ export default function CartPage() {
 
               <div className="flex justify-between items-center">
                 <span>Delivery:</span>
-                <span>৳{deliveryCharge}</span>
+                <span>৳{paymentMethod== "Home" ? deliveryCharge : 50}</span>
               </div>
             </div>
 
@@ -139,6 +155,21 @@ export default function CartPage() {
               />
             </div>
 
+            {PAYMENT_METHODS.map((m) => (
+              <button
+                key={m.id}
+                type="button"
+                onClick={() => setPaymentMethod(m.id)}
+                className={`w-full flex items-center justify-between p-2 mb-0 border-[3px] border-black rounded-xl transition-all ${paymentMethod === m.id ? 'bg-white' : 'bg-transparent'
+                  }`}
+              >
+                <span className="font-bold text-lg">{m.label} {m.emoji}</span>
+                {paymentMethod === m.id && <CheckCircle2 className="text-black" />}
+              </button>
+            ))}
+
+
+
             <p className="text-xs md:text-sm font-bold text-black leading-tight mt-1">
               *Delivery charge must be included before delivery.
             </p>
@@ -147,6 +178,7 @@ export default function CartPage() {
             </p>
 
             {/* চেকআউটে যাওয়ার বাটন — route lowercase হওয়ায় href ঠিক করা হলো */}
+            {paymentMethod == "Home"? (
             <Link href="/cheackout">
               <button
                 disabled={cartItems.length === 0}
@@ -154,7 +186,14 @@ export default function CartPage() {
               >
                 Continue To Pay
               </button>
-            </Link>
+            </Link>): <Link href="/cheackout_dakhgor">
+              <button
+                disabled={cartItems.length === 0}
+                className="w-full bg-black text-white hover:bg-gray-900 transition-colors py-3 px-6 rounded-full font-bold text-base md:text-lg text-center shadow-md active:scale-98 transform duration-75 disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                Continue To Pay
+              </button>
+            </Link>}
           </div>
 
         </div>

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { ShoppingCart, Star } from 'lucide-react';
-import { products } from '@/app/assart';
+import { product } from '@/app/assart';
 import Link from 'next/link';
 import { useCart } from '@/app/context/CartContext';
 
@@ -44,7 +44,7 @@ const ProductCard = ({ id, price, rating, description, image, title, piece, weig
         <p className="text-[15px] font-medium text-black leading-tight mb-4 flex-grow">
           {description}
         </p>
-        
+
         {/* Action Button */}
         <div className="flex gap-2 mt-auto">
         <button
@@ -84,17 +84,17 @@ export default function App() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-8">
 
         {/* Mapping through the products array to render cards */}
-        {products.map((product) => (
+        {product.map((products) => (
           <ProductCard 
-            key={product.id}
-            price={product.price}
-            rating={product.rating}
-            description={product.description}
-            image={product.image}
-            title={product.title}
-            piece={product.piece}
-            weight={product.weight}
-            id={product.id}
+            key={products.id}
+            price={products.price}
+            rating={products.rating}
+            description={products.description}
+            image={products.image}
+            title={products.title}
+            piece={products.piece}
+            weight={products.weight}
+            id={products.id}
           />
         ))}
 

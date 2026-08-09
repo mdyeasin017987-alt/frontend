@@ -1,11 +1,13 @@
 import React from 'react';
 import Hero from '../componet/hero';
+import Feature from '../componet/feature';
 import Product from '../componet/product';
 
 const HomePage = () => {
   return (
     <div>
       <Hero />
+      <Feature />
       <Product />
     </div>
   );

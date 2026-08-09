@@ -1,33 +1,13 @@
 "use client";
 import React, { useRef, useState } from 'react';
-import { ChevronDown, CheckCircle2 } from 'lucide-react';
+import { CheckCircle2 } from 'lucide-react';
 import { useCart } from '@/app/context/CartContext';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/app/lib/supabaseClient';
-import { products } from '../assart';
-import Link from 'next/link';
 
-// Short reference code for UI display (e.g., SN-A1B2C3D4)
 const generateDisplayId = () => 'SN-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
-const BD_LOCATIONS = {
-  Dhaka: {
-    Dhaka: ['Savar', 'Dhamrai', 'Keraniganj', 'Nawabganj', 'Dohar'],
-    Gazipur: ['Gazipur Sadar', 'Kaliakair', 'Kaliganj', 'Kapasia', 'Sreepur'],
-    Narayanganj: ['Narayanganj Sadar', 'Bandar', 'Araihazar', 'Rupganj', 'Sonargaon'],
-  },
-  Chattogram: {
-    Chattogram: ['Anwara', 'Banshkhali', 'Boalkhali', 'Chandanaish', 'Fatikchhari'],
-    "Cox's Bazar": ['Chakaria', "Cox's Bazar Sadar", 'Kutubdia', 'Maheshkhali', 'Ramu'],
-  },
-  Rajshahi: {
-    Rajshahi: ['Bagha', 'Charghat', 'Durgapur', 'Godagari', 'Mohanpur'],
-    Bogra: ['Bogra Sadar', 'Dhunat', 'Dupchanchia', 'Gabtali', 'Nandigram'],
-  },
-};
-
 const PAYMENT_METHODS = [
-  { id: 'delivery', label: 'Delivery Charge only', emoji: '🚚' },
   { id: 'full', label: 'Full Payment', emoji: '💳' },
 ];
 
@@ -40,44 +20,19 @@ const InputField = ({ label, required, children, className = '' }) => (
   </div>
 );
 
-const SelectField = ({ label, required, value, onChange, disabled, options, placeholder }) => (
-  <div className="flex-1">
-    <label className="block font-bold text-base mb-1.5 text-black">
-      {label} {required && <span className="text-red-600">*</span>}
-    </label>
-    <div className="relative">
-      <select
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-        className="w-full appearance-none border-[3px] border-black rounded-xl px-4 py-3 font-bold bg-white focus:ring-2 ring-black outline-none transition-all cursor-pointer disabled:opacity-50"
-      >
-        <option value="" disabled>{placeholder}</option>
-        {options.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-      </select>
-      <ChevronDown className="absolute right-3 top-3.5 pointer-events-none" />
-    </div>
-  </div>
-);
-
 export default function CheckoutPage() {
-  const { items: cartItems, totalPrice, totalQuantity , piece } = useCart();
+  const { items: cartItems, totalPrice, totalQuantity } = useCart();
   const router = useRouter();
 
-  const [formData, setFormData] = useState({ name: '', phone: '', area: '', address: '', note: '' });
-  const [paymentMethod, setPaymentMethod] = useState('delivery');
-  const [selectedDivision, setSelectedDivision] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('');
-  const [selectedUpazila, setSelectedUpazila] = useState('');
+  const [formData, setFormData] = useState({
+    name: '', phone: '', area: '', address: '', note: '', postal_name: '', postal_code: '',
+  });
+  const [paymentMethod, setPaymentMethod] = useState('full');
   const [errors, setErrors] = useState({});
   const [placingOrder, setPlacingOrder] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
-  // UI Display ID only (database will auto-generate the actual primary key UUID)
   const displayOrderId = useRef(generateDisplayId());
-
-  const districts = selectedDivision ? Object.keys(BD_LOCATIONS[selectedDivision]) : [];
-  const upazilas = (selectedDivision && selectedDistrict) ? BD_LOCATIONS[selectedDivision][selectedDistrict] : [];
 
   const deliveryCharge = totalQuantity > 0 ? 150 + (totalQuantity - 1) * 30 : 0;
   const grandTotal = totalPrice + deliveryCharge;
@@ -86,17 +41,11 @@ export default function CheckoutPage() {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
-
-  const subtotal = ""
-
   const validate = () => {
     const next = {};
     if (!formData.name.trim()) next.name = 'Name is required';
     if (!/^01[0-9]{9}$/.test(formData.phone.trim())) next.phone = 'Enter a valid 11-digit BD phone number';
-    if (!formData.area.trim()) next.area = 'Area is required';
-    if (!selectedDivision) next.division = 'Select a division';
-    if (!selectedDistrict) next.district = 'Select a district';
-    if (!selectedUpazila) next.upazila = 'Select an upazila';
+    if (!formData.area.trim()) next.area = 'Address is required';
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -108,21 +57,12 @@ export default function CheckoutPage() {
     setPlacingOrder(true);
     setSubmitError('');
 
-    // ---- উভয় payment method-ই একই shape-এর order insert করে, শুধু ----
-    // /app/payment page-এ পাঠানো amount আলাদা হয়:
-    //  - Delivery Payment: শুধু deliveryCharge advance পাঠাতে হবে (bKash/Nagad),
-    //    বাকি পণ্যের দাম ডেলিভারির সময় হাতে দেবে।
-    //  - Full Payment: পুরো grandTotal আগেই পাঠাতে হবে।
-    // দুটোতেই কোনো automated gateway (BDGate) নেই বলে, TrxID manual verify
-    // হওয়ার আগ পর্যন্ত payment_status 'pending' থাকে, /app/payment-এ সাবমিট
-    // করলে 'pending_verification' হয়।
     const orderRow = {
       customer_name: formData.name,
       phone: formData.phone,
-      division: selectedDivision,
-      district: selectedDistrict,
-      upazila: selectedUpazila,
       area: formData.area,
+      postal_name: formData.postal_name,
+      postal_code: formData.postal_code,
       address_note: formData.note,
       items: cartItems,
       total_price: totalPrice,
@@ -132,12 +72,12 @@ export default function CheckoutPage() {
       status: 'pending',
       product_id: displayOrderId.current,
     };
+
     const { data: insertedOrder, error } = await supabase
       .from('orders')
       .insert(orderRow)
       .select('id')
       .single();
-
 
     setPlacingOrder(false);
 
@@ -147,10 +87,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    // cart এখনো clear করছি না — TrxID সাবমিট না হওয়া পর্যন্ত cart থাকুক,
-    // যাতে user মাঝপথে ফিরে এলেও অর্ডার হারিয়ে না যায়।
-    const amountToPay = paymentMethod === 'delivery' ? deliveryCharge : grandTotal;
-    router.push(`/payment?orderId=${insertedOrder.id}&amount=${amountToPay}&type=${paymentMethod}`);
+    router.push(`/payment?orderId=${insertedOrder.id}&amount=${grandTotal}&type=${paymentMethod}`);
   };
 
   return (
@@ -196,7 +133,7 @@ export default function CheckoutPage() {
                   {errors.phone && <p className="text-red-600 text-sm font-bold mt-1">{errors.phone}</p>}
                 </div>
                 <div>
-                  <InputField label="Area" required>
+                  <InputField label="Address" required>
                     <input
                       value={formData.area}
                       onChange={handleChange('area')}
@@ -208,46 +145,24 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-1 mt-4">
-                <SelectField
-                  label="Division"
-                  required
-                  options={Object.keys(BD_LOCATIONS)}
-                  value={selectedDivision}
-                  onChange={(e) => {
-                    setSelectedDivision(e.target.value);
-                    setSelectedDistrict('');
-                    setSelectedUpazila('');
-                  }}
-                  placeholder="Division"
-                />
-                <SelectField
-                  label="District"
-                  required
-                  options={districts}
-                  value={selectedDistrict}
-                  onChange={(e) => {
-                    setSelectedDistrict(e.target.value);
-                    setSelectedUpazila('');
-                  }}
-                  disabled={!selectedDivision}
-                  placeholder="District"
-                />
-                <SelectField
-                  label="Upazila"
-                  required
-                  options={upazilas}
-                  value={selectedUpazila}
-                  onChange={(e) => setSelectedUpazila(e.target.value)}
-                  disabled={!selectedDistrict}
-                  placeholder="Upazila"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-1 mt-4">
+                <InputField label="Postal Office">
+                  <input
+                    value={formData.postal_name}
+                    onChange={handleChange('postal_name')}
+                    className="w-full bg-amber-50 border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none"
+                    placeholder="e.g. Mirpur GPO"
+                  />
+                </InputField>
+                <InputField label="Postal Code">
+                  <input
+                    value={formData.postal_code}
+                    onChange={handleChange('postal_code')}
+                    className="w-full bg-amber-50 border-[3px] border-black rounded-xl px-4 py-3 font-bold outline-none"
+                    placeholder="e.g. 1216"
+                  />
+                </InputField>
               </div>
-              {(errors.division || errors.district || errors.upazila) && (
-                <p className="text-red-600 text-sm font-bold mb-3">
-                  {errors.division || errors.district || errors.upazila}
-                </p>
-              )}
 
               <InputField label="Delivery Note" className="mt-4">
                 <textarea
@@ -267,8 +182,9 @@ export default function CheckoutPage() {
                   key={m.id}
                   type="button"
                   onClick={() => setPaymentMethod(m.id)}
-                  className={`w-full flex items-center justify-between p-4 mb-3 border-[3px] border-black rounded-xl transition-all ${paymentMethod === m.id ? 'bg-white' : 'bg-transparent'
-                    }`}
+                  className={`w-full flex items-center justify-between p-4 mb-3 border-[3px] border-black rounded-xl transition-all ${
+                    paymentMethod === m.id ? 'bg-white' : 'bg-transparent'
+                  }`}
                 >
                   <span className="font-bold text-lg">{m.label} {m.emoji}</span>
                   {paymentMethod === m.id && <CheckCircle2 className="text-black" />}
@@ -302,5 +218,5 @@ export default function CheckoutPage() {
         )}
       </div>
     </div>
-  )
-};
+  );
+}
