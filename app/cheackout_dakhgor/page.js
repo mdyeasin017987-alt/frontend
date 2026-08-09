@@ -146,7 +146,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-1 mt-4">
-                <InputField label="Postal Office">
+                <InputField label="Post Office">
                   <input
                     value={formData.postal_name}
                     onChange={handleChange('postal_name')}
@@ -154,7 +154,7 @@ export default function CheckoutPage() {
                     placeholder="e.g. Mirpur GPO"
                   />
                 </InputField>
-                <InputField label="Postal Code">
+                <InputField label="Post Code/Zip">
                   <input
                     value={formData.postal_code}
                     onChange={handleChange('postal_code')}

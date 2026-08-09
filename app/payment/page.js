@@ -21,10 +21,10 @@ import { supabase } from '@/app/lib/supabaseClient';
 
 // TODO: নিজের আসল bKash/Nagad Personal নাম্বার দিয়ে বদলে নাও
 const PAYMENT_NUMBERS = [
-  { provider: 'bKash', type: 'Personal', number: '01805093255' },
-  { provider: 'Nagad', type: 'Personal', number: '01805093255' },
-  { provider: 'Farhan', type: 'Personal', number: '01805093255' },
-  { provider: 'Rocket', type: 'Personal', number: '01805093255' },
+  { provider: 'bKash', type: 'Personal', number: '01798735945' },
+  { provider: 'Nagad', type: 'Personal', number: '01798735945' },
+  { provider: 'Farhan', type: 'Personal', number: '01798735945' },
+  { provider: 'Rocket', type: 'Personal', number: '01798735945' },
 ];
 
 function CopyableNumber({ number }) {
