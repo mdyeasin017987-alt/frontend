@@ -14,6 +14,29 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "100% Organic Coconut - SahyesNatural",
   description: "SahyesNatural is 100% organic coconut products provider. We provide fresh and pure coconut, coconut oil, coconut milk powder, and other coconut products.",
+  openGraph: {
+    title: "100% Organic Coconut - SahyesNatural",
+    description: "SahyesNatural is 100% organic coconut products provider. We provide fresh and pure coconut, coconut oil, coconut milk powder, and other coconut products.",
+    url: "https://sahyesnatural.com",
+    siteName: "SahyesNatural",
+    images: [
+      {
+        url: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png",
+        width: 800,
+        height: 600,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "100% Organic Coconut - SahyesNatural",
+    description: "SahyesNatural is 100% organic coconut products provider. We provide fresh and pure coconut, coconut oil, coconut milk powder, and other coconut products.",
+    images: [
+      "https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png",
+    ],
+  },
 };
 export default function RootLayout({ children }) {
   return (
@@ -25,9 +48,9 @@ export default function RootLayout({ children }) {
       </head>
       <body className="font-poppins">
         <CartProvider>
-        <Navbar />
-        {children}
-        <Footer/>
+          <Navbar />
+          {children}
+          <Footer />
         </CartProvider>
       </body>
     </html>
