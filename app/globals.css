@@ -1,14 +1,14 @@
 @import "tailwindcss";
 /*#c6dbb3*/
 :root {
-  --background: #fbfaf5;
+  --background: #ffffff;
   --foreground: #0a0a0a;
 
   /* Brand colors */
   --forest-green: #0f3d1f;
   --forest-mid: #16532c;
-  --lime: #fbfaf5;
-  --lime-green: #fbfaf5;
+  --lime: white;
+  --lime-green: white;
 }
 
 @theme inline {

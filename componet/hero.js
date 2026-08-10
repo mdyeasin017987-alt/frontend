@@ -9,7 +9,7 @@ const fruits = [
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#fbfaf5] text-[#123d29]">
+    <main className="min-h-screen bg-white text-[#123d29]">
       {/* Hero */}
       <section className="relative overflow-hidden px-4 pt-10 text-center md:px-6 lg:px-8 lg:pt-14">
         {/* Badge */}
@@ -74,12 +74,7 @@ export default function Home() {
         {/* Fruit gallery — sits on a shallow arc, both outer tiles rise to match the inner ones */}
         <div className="mx-auto mt-16 grid max-w-7xl grid-cols-2 gap-3 sm:gap-4 lg:mt-24 lg:grid-cols-4 lg:gap-5">
           {fruits.map((src, index) => {
-            const arcStyle =
-              index === 0
-                ? { transform: 'perspective(600px) rotateY(6deg) rotateZ(-2deg)', transformOrigin: 'bottom right' }
-                : index === 3
-                ? { transform: 'perspective(600px) rotateY(-6deg) rotateZ(2deg)', transformOrigin: 'bottom left' }
-                : {}
+            const arcStyle =null
 
             return (
               <div
@@ -99,10 +94,7 @@ export default function Home() {
         </div>
 
         {/* Curved fade into the section below, spanning the whole row */}
-        <div
-          className="pointer-events-none relative mx-auto -mt-10 h-16 max-w-7xl rounded-[100%] bg-[#fbfaf5] sm:h-20"
-          aria-hidden="true"
-        />
+        
       </section>
     </main>
   )
