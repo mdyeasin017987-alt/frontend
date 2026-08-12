@@ -195,7 +195,7 @@ export default function CheckoutPage() {
 
               <div className="flex flex-col gap-2 font-bold text-black mb-4">
                 <div className="flex justify-between"><span>Subtotal:</span><span>৳{totalPrice}</span></div>
-                <div className="flex justify-between"><span>Delivery:</span><span>৳{deliveryCharge}</span></div>
+                <div className="flex justify-between"><span>Delivery:</span><span>৳{50}</span></div>
                 <div className="flex justify-between text-lg border-t-2 border-black pt-2 mt-1">
                   <span>Total:</span><span>৳{grandTotal}</span>
                 </div>

@@ -6,7 +6,7 @@ export const product= [
     description: "Premium green tender coconut for sweet drinking water.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png",
     piece: 4,
-    weight: "1.5-1.7 kg"
+    weight: "1.5-1.8 kg"
   },
   {
     
@@ -55,6 +55,15 @@ export const product= [
     weight: "600-800 g"
   },
   {
+    id: 9,
+    price: "90",
+    title: "Small Narikel (Coconut)",
+    description: "Fresh and natural small-sized coconut, ideal for various uses.",
+    image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png",
+    piece: 6,
+    weight: "400-600 g"
+  },
+  {
     id: 7,
     price: "449",
     title: "supari (betel nut)",
@@ -81,7 +90,7 @@ export const products = [
     description: "Premium green tender coconut for sweet drinking water.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png",
     piece: 4,
-    weight: "1.5-1.7 kg"
+    weight: "1.5-1.8 kg"
   },
   {
     
@@ -146,5 +155,15 @@ export const products = [
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785754056/file_00000000d5f08211a2740de16098c37d_wgjsyx.png",
     piece: 2,
     weight: "1 kg"
+  },
+  
+  {
+    id: 9,
+    price: "540",
+    title: "Small Narikel (Coconut)",
+    description: "Fresh and natural small-sized coconut, ideal for various uses.",
+    image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png",
+    piece: 6,
+    weight: "400-600 g"
   }
 ];

@@ -151,6 +151,8 @@ export default function CheckoutPage() {
     // যাতে user মাঝপথে ফিরে এলেও অর্ডার হারিয়ে না যায়।
     const amountToPay = paymentMethod === 'delivery' ? deliveryCharge : grandTotal;
     router.push(`/payment?orderId=${insertedOrder.id}&amount=${amountToPay}&type=${paymentMethod}`);
+   // Clear cart after order is placed
+   
   };
 
   return (

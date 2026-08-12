@@ -47,16 +47,10 @@ const ProductCard = ({ id, price, rating, description, image, title, piece, weig
 
         {/* Action Button */}
         <div className="flex gap-2 mt-auto">
-        <button
-          onClick={handleAddToCart}
-          className="bg-black hover:bg-gray-800 transition-colors text-white rounded-xl py-2 px-3 flex items-center justify-center gap-2 w-max text-sm font-medium mt-auto"
-        >
-          <ShoppingCart size={16} />
-          Add to Cart
-        </button>
+        
         <Link href={`/product/${id}`}>
         
-        <button className="transition-colors text-black rounded-xl py-2 px-3 flex items-center justify-center gap-2 w-max text-sm font-medium mt-auto">
+        <button className="transition-colors bg-black text-white rounded-xl py-2 px-3 flex items-center justify-center gap-2 w-max text-sm font-medium mt-auto">
         
           View Product
         </button>
