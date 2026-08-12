@@ -38,7 +38,7 @@ export const product= [
   },
   {
     id: 5,
-    price: "145",
+    price: "135",
     title: "Narikel (Coconut)",
     description: "Fresh and natural coconut, perfect for drinking and cooking.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png",
@@ -47,7 +47,7 @@ export const product= [
   },
   {
     id: 6,
-    price: "130",
+    price: "120",
     title: "Medium Narikel (Coconut)",
     description: "Fresh and natural medium-sized coconut, ideal for various uses.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png",
@@ -56,7 +56,7 @@ export const product= [
   },
   {
     id: 9,
-    price: "90",
+    price: "95",
     title: "Small Narikel (Coconut)",
     description: "Fresh and natural small-sized coconut, ideal for various uses.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png",
@@ -122,7 +122,7 @@ export const products = [
   },
   {
     id: 5,
-    price: "870",
+    price: "810",
     title: "Narikel (Coconut)",
     description: "Fresh and natural coconut, perfect for drinking and cooking.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png",
@@ -131,7 +131,7 @@ export const products = [
   },
   {
     id: 6,
-    price: "780",
+    price: "720",
     title: "Medium Narikel (Coconut)",
     description: "Fresh and natural medium-sized coconut, ideal for various uses.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png",
@@ -159,7 +159,7 @@ export const products = [
   
   {
     id: 9,
-    price: "540",
+    price: "570",
     title: "Small Narikel (Coconut)",
     description: "Fresh and natural small-sized coconut, ideal for various uses.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753713/file_0000000041a48211991ecf82d8074556_sktxi3.png",
