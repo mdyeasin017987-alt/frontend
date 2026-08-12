@@ -69,7 +69,6 @@ export const product= [
     title: "supari (betel nut)",
     description: "Dry supari (betel nut), perfect for traditional uses and rituals.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753063/file_00000000f3d08211b85211c514c7321c_tlubxr.png",
-    piece: 2,
     weight: "1 kg"
   },
   {
@@ -78,7 +77,6 @@ export const product= [
     title: "supari (betel nut) ",
     description: "Dry supari (betel nut), perfect for traditional uses and rituals.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785754056/file_00000000d5f08211a2740de16098c37d_wgjsyx.png",
-    piece: 2,
     weight: "1 kg"
   }
 ];
