@@ -20,7 +20,7 @@ export default function CartPage() {
 
   const PAYMENT_METHODS = [
     { id: 'Home', label: 'Home delivery', emoji: '🚚' },
-    { id: 'dakhgor', label: 'dakhgor delivery', emoji: '🚚' },
+    { id: 'dakhgor', label: 'Dakghor delivery', emoji: '🚚' },
   ];
 
   const handlePlaceOder = ()=>{

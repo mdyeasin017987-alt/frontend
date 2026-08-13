@@ -11,19 +11,86 @@ import Link from 'next/link';
 const generateDisplayId = () => 'SN-' + Math.random().toString(36).substring(2, 8).toUpperCase();
 
 const BD_LOCATIONS = {
-  Dhaka: {
-    Dhaka: ['Savar', 'Dhamrai', 'Keraniganj', 'Nawabganj', 'Dohar'],
-    Gazipur: ['Gazipur Sadar', 'Kaliakair', 'Kaliganj', 'Kapasia', 'Sreepur'],
-    Narayanganj: ['Narayanganj Sadar', 'Bandar', 'Araihazar', 'Rupganj', 'Sonargaon'],
+  "Dhaka Division": {
+    "Dhaka District": ["Dhamrai Upazila", "Dohar Upazila", "Keraniganj Upazila", "Nawabganj Upazila", "Savar Upazila"],
+    "Faridpur District": ["Alfadanga Upazila", "Bhanga Upazila", "Boalmari Upazila", "Char Bhadrasan Upazila", "Faridpur Sadar Upazila", "Madhukhali Upazila", "Nagarkanda Upazila", "Sadarpur Upazila", "Saltha Upazila"],
+    "Gazipur District": ["Gazipur Sadar Upazila", "Kaliakair Upazila", "Kaliganj Upazila", "Kapasia Upazila", "Sreepur Upazila"],
+    "Gopalganj District": ["Gopalganj Sadar Upazila", "Kashiani Upazila", "Kotalipara Upazila", "Muksudpur Upazila", "Tungipara Upazila"],
+    "Kishoreganj District": ["Austagram Upazila", "Bajitpur Upazila", "Bhairab Upazila", "Hossainpur Upazila", "Itna Upazila", "Karimganj Upazila", "Katiadi Upazila", "Kishoreganj Sadar Upazila", "Kuliarchar Upazila", "Mithamain Upazila", "Nikli Upazila", "Pakundia Upazila", "Tarail Upazila"],
+    "Madaripur District": ["Kalkini Upazila", "Madaripur Sadar Upazila", "Rajoir Upazila", "Shibchar Upazila", "Dasar Upazila"],
+    "Manikganj District": ["Daulatpur Upazila", "Ghior Upazila", "Harirampur Upazila", "Manikganj Sadar Upazila", "Saturia Upazila", "Shibalaya Upazila", "Singair Upazila"],
+    "Munshiganj District": ["Gazaria Upazila", "Louhajang Upazila", "Munshiganj Sadar Upazila", "Sirajdikhan Upazila", "Sreenagar Upazila", "Tongibari Upazila"],
+    "Narayanganj District": ["Araihazar Upazila", "Sonargaon Upazila", "Narayanganj Sadar Upazila", "Rupganj Upazila", "Bandar Upazila"],
+    "Narsingdi District": ["Belabo Upazila", "Monohardi Upazila", "Narsingdi Sadar", "Palash Upazila", "Raipura Upazila", "Shibpur Upazila"],
+    "Rajbari District": ["Baliakandi Upazila", "Goalanda Upazila", "Kalukhali Upazila", "Pangsha Upazila", "Rajbari Sadar Upazila"],
+    "Shariatpur District": ["Bhedarganj Upazila", "Damudya Upazila", "Gosairhat Upazila", "Naria Upazila", "Shariatpur Sadar Upazila", "Zajira Upazila"],
+    "Tangail District": ["Basail Upazila", "Bhuapur Upazila", "Delduar Upazila", "Dhanbari Upazila", "Ghatail Upazila", "Gopalpur Upazila", "Kalihati Upazila", "Madhupur Upazila", "Mirzapur Upazila", "Nagarpur Upazila", "Sakhipur Upazila", "Tangail Sadar Upazila"]
   },
-  Chattogram: {
-    Chattogram: ['Anwara', 'Banshkhali', 'Boalkhali', 'Chandanaish', 'Fatikchhari'],
-    "Cox's Bazar": ['Chakaria', "Cox's Bazar Sadar", 'Kutubdia', 'Maheshkhali', 'Ramu'],
+  "Khulna Division": {
+    "Bagerhat District": ["Chitalmari Upazila", "Fakirhat Upazila", "Kachua Upazila", "Mollahat Upazila", "Mongla Upazila", "Morelganj Upazila", "Rampal Upazila", "Sharankhola Upazila", "Bagerhat Sadar Upazila"],
+    "Chuadanga District": ["Alamdanga Upazila", "Chuadanga Sadar Upazila", "Damurhuda Upazila", "Jibannagar Upazila"],
+    "Jessore District": ["Abhaynagar Upazila", "Bagherpara Upazila", "Chaugachha Upazila", "Jhikargachha Upazila", "Keshabpur Upazila", "Jessore Sadar Upazila", "Manirampur Upazila", "Sharsha Upazila"],
+    "Jhenaidah District": ["Harinakunda Upazila", "Jhenaidah Sadar Upazila", "Kaliganj Upazila", "Kotchandpur Upazila", "Maheshpur Upazila", "Shailkupa Upazila"],
+    "Khulna District": ["Batiaghata Upazila", "Dacope Upazila", "Dumuria Upazila", "Koyra Upazila", "Paikgachha Upazila", "Phultala Upazila", "Rupsha Upazila", "Terokhada Upazila", "Dighalia Upazila"],
+    "Kushtia District": ["Bheramara Upazila", "Daulatpur Upazila", "Khoksa Upazila", "Kumarkhali Upazila", "Kushtia Sadar Upazila", "Mirpur Upazila"],
+    "Magura District": ["Magura Sadar Upazila", "Mohammadpur Upazila", "Shalikha Upazila", "Sreepur Upazila"],
+    "Meherpur District": ["Gangni Upazila", "Mujibnagar Upazila", "Meherpur Sadar Upazila"],
+    "Narail District": ["Kalia Upazila", "Lohagara Upazila", "Narail Sadar Upazila"],
+    "Satkhira District": ["Assasuni Upazila", "Debhata Upazila", "Kalaroa Upazila", "Kaliganj Upazila", "Satkhira Sadar Upazila", "Shyamnagar Upazila", "Tala Upazila"]
   },
-  Rajshahi: {
-    Rajshahi: ['Bagha', 'Charghat', 'Durgapur', 'Godagari', 'Mohanpur'],
-    Bogra: ['Bogra Sadar', 'Dhunat', 'Dupchanchia', 'Gabtali', 'Nandigram'],
+  "Chittagong Division": {
+    "Bandarban District": ["Alikadam Upazila", "Bandarban Sadar Upazila", "Lama Upazila", "Naikhongchhari Upazila", "Rowangchhari Upazila", "Ruma Upazila", "Thanchi Upazila"],
+    "Brahmanbaria District": ["Akhaura Upazila", "Banchharampur Upazila", "Bijoynagar Upazila", "Brahmanbaria Sadar Upazila", "Ashuganj Upazila", "Kasba Upazila", "Nabinagar Upazila", "Nasirnagar Upazila", "Sarail Upazila"],
+    "Chandpur District": ["Chandpur Sadar Upazila", "Faridganj Upazila", "Haimchar Upazila", "Hajiganj Upazila", "Kachua Upazila", "Matlab South Upazila", "Matlab North Upazila", "Shahrasti Upazila"],
+    "Chittagong District": ["Anwara Upazila", "Banshkhali Upazila", "Boalkhali Upazila", "Chandanaiash Upazila", "Fatikchhari Upazila", "Hathazari Upazila", "Lohagara Upazila", "Mirsharai Upazila", "Patiya Upazila", "Rangunia Upazila", "Raozan Upazila", "Sandwip Upazila", "Satkania Upazila", "Sitakunda Upazila", "Karnaphuli Upazila"],
+    "Comilla District": ["Barura Upazila", "Brahmanpara Upazila", "Burichang Upazila", "Chandina Upazila", "Chauddagram Upazila", "Sadar South Upazila", "Adarsha Sadar Upazila", "Daudkandi Upazila", "Debidwar Upazila", "Homna Upazila", "Laksam Upazila", "Monohargonj Upazila", "Meghna Upazila", "Muradnagar Upazila", "Nangalkot Upazila", "Titas Upazila", "Lalmai Upazila"],
+    "Cox's Bazar District": ["Chakaria Upazila", "Cox's Bazar Sadar Upazila", "Kutubdia Upazila", "Moheshkhali Upazila", "Pekua Upazila", "Ramu Upazila", "Teknaf Upazila", "Ukhia Upazila", "Eidgaon Upazila"],
+    "Feni District": ["Chhagalnaiya Upazila", "Daganbhuiyan Upazila", "Feni Sadar Upazila", "Fulgazi Upazila", "Parshuram Upazila", "Sonagazi Upazila"],
+    "Khagrachhari District": ["Dighinala Upazila", "Manikchhari Upazila", "Khagrachhari Sadar Upazila", "Laxmichhari Upazila", "Mahalchhari Upazila", "Matiranga Upazila", "Panchhari Upazila", "Ramgarh Upazila", "Guimara Upazila"],
+    "Lakshmipur District": ["Kamalnagar Upazila", "Lakshmipur Sadar Upazila", "Raipur Upazila", "Ramganj Upazila", "Ramgati Upazila", "Chandraganj Upazila"],
+    "Noakhali District": ["Begumganj Upazila", "Chatkhil Upazila", "Companiganj Upazila", "Hatiya Upazila", "Senbagh Upazila", "Sonaimuri Upazila", "Subarnachar Upazila", "Noakhali Sadar", "Kabirhat Upazila"],
+    "Rangamati Hill District": ["Baghaichhari Upazila", "Barkal Upazila", "Kawkhali Upazila", "Kaptai Upazila", "Jurachhari Upazila", "Langadu Upazila", "Naniarchar Upazila", "Rangamati Sadar Upazila", "Rajasthali Upazila", "Belaichhari Upazila"]
   },
+  "Rajshahi Division": {
+    "Bogra District": ["Adamdighi Upazila", "Bogra Sadar Upazila", "Dhunat Upazila", "Dupchanchia Upazila", "Gabtali Upazila", "Kahaloo Upazila", "Nandigram Upazila", "Sariakandi Upazila", "Shajahanpur Upazila", "Sherpur Upazila", "Shibganj Upazila", "Sonatala Upazila", "Mokamtala Upazila"],
+    "Joypurhat District": ["Akkelpur Upazila", "Joypurhat Sadar Upazila", "Kalai Upazila", "Panchbibi Upazila", "Khetlal Upazila"],
+    "Naogaon District": ["Atrai Upazila", "Dhamoirhat Upazila", "Manda Upazila", "Mahadebpur Upazila", "Naogaon Sadar Upazila", "Niamatpur Upazila", "Patnitala Upazila", "Raninagar Upazila", "Sapahar Upazila", "Badalgachhi Upazila", "Porsha Upazila"],
+    "Natore District": ["Bagatipara Upazila", "Baraigram Upazila", "Gurudaspur Upazila", "Lalpur Upazila", "Natore Sadar Upazila", "Singra Upazila", "Naldanga Upazila"],
+    "Chapai Nawabganj District": ["Shibganj Upazila", "Bholahat Upazila", "Gomastapur Upazila", "Nachole Upazila", "Chapai Nawabganj Sadar Upazila"],
+    "Pabna District": ["Atgharia Upazila", "Bera Upazila", "Bhangura Upazila", "Chatmohar Upazila", "Faridpur Upazila", "Ishwardi Upazila", "Pabna Sadar Upazila", "Santhia Upazila", "Sujanagar Upazila"],
+    "Rajshahi District": ["Bagha Upazila", "Bagmara Upazila", "Charghat Upazila", "Durgapur Upazila", "Godagari Upazila", "Mohanpur Upazila", "Paba Upazila", "Puthia Upazila", "Tanore Upazila"],
+    "Sirajganj District": ["Belkuchi Upazila", "Chauhali Upazila", "Kamarkhanda Upazila", "Kazipur Upazila", "Raiganj Upazila", "Shahjadpur Upazila", "Sirajganj Sadar", "Tarash Upazila", "Ullapara Upazila"]
+  },
+  "Sylhet Division": {
+    "Habiganj District": ["Ajmiriganj Upazila", "Bahubal Upazila", "Baniachang Upazila", "Chunarughat Upazila", "Habiganj Sadar Upazila", "Lakhai Upazila", "Madhabpur Upazila", "Nabiganj Upazila", "Shayestaganj Upazila"],
+    "Moulvibazar District": ["Barlekha Upazila", "Juri Upazila", "Kamalganj Upazila", "Kulaura Upazila", "Moulvibazar Sadar Upazila", "Rajnagar Upazila", "Sreemangal Upazila"],
+    "Sunamganj District": ["Bishwamharpur Upazila", "Chhatak Upazila", "Derai Upazila", "Dharmapasha Upazila", "Dowarabazar Upazila", "Jagannathpur Upazila", "Jamalganj Upazila", "Sullah Upazila", "Sunamganj Sadar Upazila", "Tahirpur Upazila", "Shantiganj Upazila", "Madhyanagar Upazila"],
+    "Sylhet District": ["Balaganj Upazila", "Beanibazar Upazila", "Bishwanath Upazila", "Companiganj Upazila", "South Surma Upazila", "Fenchuganj Upazila", "Golapganj Upazila", "Gowainghat Upazila", "Jaintiapur Upazila", "Kanaighat Upazila", "Sylhet Sadar Upazila", "Zakiganj Upazila", "Osmani Nagar Upazila"]
+  },
+  "Rangpur Division": {
+    "Dinajpur District": ["Birampur Upazila", "Birganj Upazila", "Biral Upazila", "Bochaganj Upazila", "Chirirbandar Upazila", "Phulbari Upazila", "Ghoraghat Upazila", "Hakimpur Upazila", "Kaharole Upazila", "Khansama Upazila", "Nawabganj Upazila", "Parbatipur Upazila", "Dinajpur Sadar Upazila"],
+    "Gaibandha District": ["Fulchhari Upazila", "Gaibandha Sadar Upazila", "Gobindaganj Upazila", "Palashbari Upazila", "Sadullapur Upazila", "Saghatta Upazila", "Sundarganj Upazila"],
+    "Kurigram District": ["Phulbari Upazila", "Bhurungamari Upazila", "Char Rajibpur Upazila", "Chilmari Upazila", "Kurigram Sadar Upazila", "Nageswari Upazila", "Rajarhat Upazila", "Roumari Upazila", "Ulipur Upazila"],
+    "Lalmonirhat District": ["Aditmari Upazila", "Hatibandha Upazila", "Kaliganj Upazila", "Lalmonirhat Sadar Upazila", "Patgram Upazila"],
+    "Nilphamari District": ["Domar Upazila", "Jaldhaka Upazila", "Kishoreganj Upazila", "Nilphamari Sadar Upazila", "Saidpur Upazila", "Dimla Upazila"],
+    "Panchagarh District": ["Atwari Upazila", "Boda Upazila", "Debiganj Upazila", "Panchagarh Sadar", "Tetulia Upazila"],
+    "Rangpur District": ["Badarganj Upazila", "Kaunia Upazila", "Rangpur Sadar Upazila", "Mithapukur Upazila", "Pirgachha Upazila", "Pirganj Upazila", "Taraganj Upazila", "Gangachhara Upazila"],
+    "Thakurgaon District": ["Pirganj Upazila", "Baliadangi Upazila", "Haripur Upazila", "Ranisankail Upazila", "Thakurgaon Sadar Upazila", "Bhulli Upazila", "Ruhia Upazila"]
+  },
+  "Mymensingh Division": {
+    "Jamalpur District": ["Bakshiganj Upazila", "Dewanganj Upazila", "Islampur Upazila", "Jamalpur Sadar Upazila", "Madarganj Upazila", "Melandaha Upazila", "Sarishabari Upazila"],
+    "Mymensingh District": ["Bhaluka Upazila", "Dhobaura Upazila", "Fulbaria Upazila", "Gafargaon Upazila", "Gouripur Upazila", "Haluaghat Upazila", "Ishwarganj Upazila", "Mymensingh Sadar Upazila", "Muktagachha Upazila", "Nandail Upazila", "Phulpur Upazila", "Tarakanda Upazila", "Trishal Upazila"],
+    "Netrokona District": ["Atpara Upazila", "Barhatta Upazila", "Durgapur Upazila", "Khaliajuri Upazila", "Kalmakanda Upazila", "Kendua Upazila", "Madan Upazila", "Mohanganj Upazila", "Netrokona Sadar Upazila", "Purbadhala Upazila"],
+    "Sherpur District": ["Jhenaigati Upazila", "Nakla Upazila", "Nalitabari Upazila", "Sherpur Sadar Upazila", "Sreebardi Upazila"]
+  },
+  "Barisal Division": {
+    "Barguna District": ["Amtali Upazila", "Bamna Upazila", "Barguna Sadar Upazila", "Betagi Upazila", "Patharghata Upazila", "Taltali Upazila"],
+    "Barisal District": ["Agailjhara Upazila", "Babuganj Upazila", "Bakerganj Upazila", "Banaripara Upazila", "Gournadi Upazila", "Hijla Upazila", "Barisal Sadar Upazila", "Mehendiganj Upazila", "Muladi Upazila", "Wazirpur Upazila"],
+    "Bhola District": ["Bhola Sadar Upazila", "Borhanuddin Upazila", "Daulatkhan Upazila", "Lalmohan Upazila", "Manpura Upazila", "Tazumuddin Upazila", "Char Fasson Upazila"],
+    "Jhalokathi District": ["Jhalokathi Sadar Upazila", "Nalchhiti Upazila", "Kathalia Upazila", "Rajapur Upazila"],
+    "Patuakhali District": ["Bauphal Upazila", "Dashmina Upazila", "Dumki Upazila", "Kalapara Upazila", "Mirzaganj Upazila", "Patuakhali Sadar Upazila", "Rangabali Upazila", "Galachipa Upazila"],
+    "Pirojpur District": ["Bhandaria Upazila", "Kawkhali Upazila", "Mathbaria Upazila", "Nazirpur Upazila", "Pirojpur Sadar Upazila", "Nesarabad Upazila", "Zianagar Upazila"]
+  }
 };
 
 const PAYMENT_METHODS = [
