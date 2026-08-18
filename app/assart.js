@@ -1,7 +1,7 @@
 export const product= [
   {
     id: 1,
-    price: "140",
+    price: "145",
     title: "Premium Green Coconut",
     description: "Premium green tender coconut for sweet drinking water.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png",
@@ -11,7 +11,7 @@ export const product= [
   {
     
     id: 2,
-    price: "120",
+    price: "135",
     title: "Regular Coconut",
     description: "Desi coconut pure coconut and size abilable.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png",
@@ -20,7 +20,7 @@ export const product= [
   },
   {
     id: 3,
-    price: "155",
+    price: "165",
     title: "Premium dimond cutting coconut",
     description: "Premium dimond cutting coconut for sweet drinking water.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753712/file_000000009c3482078ce71ee0abdfcc37_apc0i5.png",
@@ -29,7 +29,7 @@ export const product= [
   },
   {
     id: 4,
-    price: "135",
+    price: "145",
     title: "Regular cutting coconut",
     description: "Regular cutting coconut for sweet drinking water.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753712/file_000000009c3482078ce71ee0abdfcc37_apc0i5.png",
@@ -83,7 +83,7 @@ export const product= [
 export const products = [
   {
     id: 1,
-    price: "560",
+    price: "580",
     title: "Premium Green Coconut",
     description: "Premium green tender coconut for sweet drinking water.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png",
@@ -93,7 +93,7 @@ export const products = [
   {
     
     id: 2,
-    price: "480",
+    price: "540",
     title: "Regular Coconut",
     description: "Desi coconut pure coconut and size abilable.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753338/file_0000000079a8820796d65473e5ef8fd3_1_geumii.png",
@@ -102,7 +102,7 @@ export const products = [
   },
   {
     id: 3,
-    price: "930",
+    price: "990",
     title: "Premium dimond cutting coconut",
     description: "Premium dimond cutting coconut for sweet drinking water.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753712/file_000000009c3482078ce71ee0abdfcc37_apc0i5.png",
@@ -111,7 +111,7 @@ export const products = [
   },
   {
     id: 4,
-    price: "810",
+    price: "870",
     title: "Regular cutting coconut",
     description: "Regular cutting coconut for sweet drinking water.",
     image: "https://res.cloudinary.com/zlegm9or/image/upload/v1785753712/file_000000009c3482078ce71ee0abdfcc37_apc0i5.png",
